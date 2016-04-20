@@ -1,0 +1,70 @@
+{
+    "name": "bariew/yii2-cms-project",
+    "description": "Yii2 Null CMS",
+    "keywords": ["yii2", "cms", "basic"],
+    "homepage": "http://www.yii2.anabena.com/",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
+        "forum": "http://www.yiiframework.com/forum/",
+        "wiki": "http://www.yiiframework.com/wiki/",
+        "irc": "irc://irc.freenode.net/yii",
+        "source": "https://github.com/yiisoft/yii2"
+    },
+    "minimum-stability": "dev",
+    "require": {
+      "php": ">=5.4.0",
+      "fxp/composer-asset-plugin": "*",
+      "yiisoft/yii2": ">=2.0.5",
+      "yiisoft/yii2-bootstrap": "*",
+      "yiisoft/yii2-swiftmailer": "*",
+      "bariew/yii2-module-cms-module": "dev-master",
+      "bariew/yii2-i18n-cms-module": "dev-master",
+      "bariew/yii2-rbac-cms-module": "dev-master",
+      "bariew/yii2-page-cms-module": "dev-master",
+      "bariew/yii2-user-cms-module": "dev-master",
+      "bariew/yii2-event-component": "dev-master",
+      "bariew/yii2-post-cms-module": "dev-master",
+      "vova07/yii2-imperavi-widget": "^1.0@dev",
+      "kartik-v/yii2-widget-select2": "dev-master",
+      "kartik-v/yii2-widget-depdrop": "dev-master",
+      "kartik-v/yii2-widget-fileinput": "dev-master",
+      "bariew/phptools": "dev-master",
+        "himiklab/yii2-colorbox-widget": "^1.0"
+    },
+    "require-dev": {
+      "yiisoft/yii2-codeception": "2.0.*",
+      "yiisoft/yii2-debug": "2.0.*",
+      "yiisoft/yii2-gii": "2.0.*",
+      "yiisoft/yii2-faker": "*",
+      "bariew/yii2-doctest-extension": "dev-master"
+    },
+    "config": {
+        "process-timeout": 1800
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "yii\\composer\\Installer::postCreateProject"
+        ]
+    },
+    "extra": {
+        "yii\\composer\\Installer::postCreateProject": {
+            "setPermission": [
+                {
+                    "runtime": "0777",
+                    "web/assets": "0777",
+                    "web/files": "0777",
+                    "web/themes": "0777",
+                    "yii": "0755",
+                    "migrations" : "0777",
+                    "modules" : "0777"
+                }
+            ]
+        },
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    }
+}

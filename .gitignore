@@ -1,0 +1,10 @@
+.git
+.idea
+nbproject
+.buildpath
+.project
+.settings
+Thumbs.db
+.DS_Store
+/vendor
+/config/local.php
