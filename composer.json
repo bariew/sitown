@@ -22,7 +22,8 @@
     },
     "scripts": {
         "post-create-project-cmd": [
-            "yii\\composer\\Installer::postCreateProject"
+            "yii\\composer\\Installer::postCreateProject",
+            "app\\controllers\\ConsoleController::postCreateProject"
         ]
     },
     "extra": {
@@ -37,7 +38,6 @@
                 }
             ]
         },
-        "app\\controllers\\ConsoleController::postCreateProject": {},
         "asset-installer-paths": {
             "npm-asset-library": "vendor/npm",
             "bower-asset-library": "vendor/bower"
