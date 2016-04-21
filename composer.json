@@ -24,7 +24,8 @@
     },
     "scripts": {
         "post-root-package-install":[
-           "php composer.phar global require \"fxp/composer-asset-plugin\""
+           "php composer.phar global require \"fxp/composer-asset-plugin\"",
+           "php composer.phar clear-cache"
         ],
         "post-create-project-cmd": [
             "yii\\composer\\Installer::postCreateProject",
