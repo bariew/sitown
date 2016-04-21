@@ -17,5 +17,4 @@ INSTALLATION
 ### // update config/local.php with your db credentials
 ### sh build.sh update
 
-
-
+baript edit
