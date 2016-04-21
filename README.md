@@ -18,3 +18,4 @@ INSTALLATION
 ### sh build.sh update
 
 baript edit
+baript edit 2
