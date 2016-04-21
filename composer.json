@@ -14,16 +14,21 @@
     },
     "minimum-stability": "dev",
     "require": {
-      "php": ">=5.4.0"
+      "php": ">=5.4.0",
+      "fxp/composer-asset-plugin": "*",
+      "yiisoft/yii2": ">=2.0.5"
     },
 
     "config": {
         "process-timeout": 1800
     },
     "scripts": {
+        "post-root-package-install":[
+           "php composer.phar global require \"fxp/composer-asset-plugin\""
+        ],
         "post-create-project-cmd": [
             "yii\\composer\\Installer::postCreateProject",
-            "app\\controllers\\ConsoleController::postCreateProject"
+            "php -r \"copy('config/local.php.example', 'config/local.php');\""
         ]
     },
     "extra": {
