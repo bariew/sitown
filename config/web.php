@@ -16,7 +16,7 @@
             'schemaCacheDuration' => '3600',
         ],
         'user' => [
-            'identityClass' => 'bariew\\userModule\\models\\User',
+            'identityClass' => 'app\\modules\\user\\models\\User',
         ],
         'authClientCollection' => [
             'class' => 'yii\authclient\Collection',
@@ -75,8 +75,7 @@
             'cookieValidationKey'   => 'someValidationKey'
         ],
         'authManager'   => [
-            'class' => '\yii\rbac\DbManager',
-            'cache' => 'yii\caching\FileCache',
+            'class' => 'yii\rbac\PhpManager',
             'defaultRoles' => [
                 'site/error', 'page/default/view', 'user/default/logout',
                 'user/default/login', 'user/default/register', 'user/default/auth',
@@ -107,8 +106,10 @@
                 [
                     'class' => 'yii\log\FileTarget',
                     'fileMode' => 0777,
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error'],
                     'except' => [
+                        'yii\web\HttpException:400',
+                        'yii\web\HttpException:403',
                         'yii\web\HttpException:404',
                         'yii\i18n\PhpMessageSource::loadMessages'
                     ],
@@ -137,9 +138,8 @@
     ],
     'modules' => [
         'page' => ['class' => 'bariew\\pageModule\\Module'],
-        'user' => ['class' => 'bariew\\userModule\\Module'],
-        'i18n' => ['class' => 'bariew\\i18nModule\\Module'],
-        'rbac' => ['class' => 'bariew\\rbacModule\\Module'],
+        'user' => ['class' => 'app\\modules\\user\\Module'],
+        //'i18n' => ['class' => 'bariew\\i18nModule\\Module'],
     ],
     'params'    => [
         'baseUrl' => 'mysite.com',

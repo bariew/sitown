@@ -276,12 +276,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bariew/yii2-module-cms-module.git",
-                "reference": "d8e8080640f821a35498c89ffb8b426ba6e38a8b"
+                "reference": "a0543c9f453baf85eda64fc5ec7429e9a38e8112"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bariew/yii2-module-cms-module/zipball/d8e8080640f821a35498c89ffb8b426ba6e38a8b",
-                "reference": "d8e8080640f821a35498c89ffb8b426ba6e38a8b",
+                "url": "https://api.github.com/repos/bariew/yii2-module-cms-module/zipball/a0543c9f453baf85eda64fc5ec7429e9a38e8112",
+                "reference": "a0543c9f453baf85eda64fc5ec7429e9a38e8112",
                 "shasum": ""
             },
             "require": {
@@ -289,9 +289,6 @@
                 "bariew/yii2-module-migration-controller": "1.*"
             },
             "type": "yii2-extension",
-            "extra": {
-                "bootstrap": "bariew\\moduleModule\\ModuleBootstrap"
-            },
             "autoload": {
                 "psr-4": {
                     "bariew\\moduleModule\\": ""
@@ -312,7 +309,7 @@
                 "yii2",
                 "yii2-null-cms-module"
             ],
-            "time": "2016-01-30 12:09:31"
+            "time": "2016-04-21 01:08:30"
         },
         {
             "name": "bariew/yii2-module-migration-controller",
@@ -569,12 +566,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bariew/yii2-user-cms-module.git",
-                "reference": "3cbb9e9638921c84af52d21459aeb0957a14757d"
+                "reference": "d9f5658cae45308c0916bc99976272a4ec906490"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bariew/yii2-user-cms-module/zipball/3cbb9e9638921c84af52d21459aeb0957a14757d",
-                "reference": "3cbb9e9638921c84af52d21459aeb0957a14757d",
+                "url": "https://api.github.com/repos/bariew/yii2-user-cms-module/zipball/d9f5658cae45308c0916bc99976272a4ec906490",
+                "reference": "d9f5658cae45308c0916bc99976272a4ec906490",
                 "shasum": ""
             },
             "require": {
@@ -604,7 +601,7 @@
                 "user",
                 "yii2"
             ],
-            "time": "2016-03-03 16:10:08"
+            "time": "2016-04-20 09:57:41"
         },
         {
             "name": "bower-asset/bootstrap",
@@ -1167,12 +1164,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "d866af325936209258989d3bd17b4fbdb9835a72"
+                "reference": "a64e8389e4dff0d9f8923b21c1da91aeae65e94e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/d866af325936209258989d3bd17b4fbdb9835a72",
-                "reference": "d866af325936209258989d3bd17b4fbdb9835a72",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/a64e8389e4dff0d9f8923b21c1da91aeae65e94e",
+                "reference": "a64e8389e4dff0d9f8923b21c1da91aeae65e94e",
                 "shasum": ""
             },
             "type": "library",
@@ -1212,7 +1209,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2016-04-06 11:18:59"
+            "time": "2016-04-20 18:14:58"
         },
         {
             "name": "kartik-v/dependent-dropdown",
