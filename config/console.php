@@ -21,6 +21,7 @@ return [
         'view'          => $mainConfig['components']['view'],
         'formatter'     => $mainConfig['components']['formatter'],
         'log'           => $mainConfig['components']['log'],
+        'github'           => $mainConfig['components']['github'],
     ],
     'controllerMap' => [
         'migrate'   => 'bariew\moduleMigration\ModuleMigrateController',

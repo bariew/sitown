@@ -7,6 +7,7 @@
 
 namespace app\controllers;
 
+use app\modules\code\components\Github;
 use yii\console\Controller;
 
 /**
@@ -55,9 +56,10 @@ class ConsoleController extends Controller
         \bariew\yii2Tools\tests\FixtureManager::init();
     }
 
-    public static function postCreateProject($event)
+    public function actionTmp()
     {
-        $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
-        copy($path.'local.php.example', $path.'local.php');
+        /** @var Github $github */
+        $github = \Yii::$app->github;
+        $res = $github->pullRequestList();
     }
 }

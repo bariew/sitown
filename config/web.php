@@ -63,7 +63,7 @@
             'events' => [
                 'yii\web\Controller' => [
                     'beforeAction' => [
-                        ['app\rbac\EventHandler', 'beforeActionAccess']
+                       // ['app\rbac\EventHandler', 'beforeActionAccess']
                     ]
                 ],
                 'yii\web\Response' => [
@@ -138,10 +138,17 @@
             'linkAssets' => true,
             'appendTimestamp' => true,
         ],
+        'github' => [
+            'class' => 'app\modules\code\components\Github',
+            'authKey' => 'xxx',
+            'owner' => 'bariew',
+            'repository' => 'sitown',
+        ],
     ],
     'modules' => [
         'page' => ['class' => 'bariew\\pageModule\\Module'],
         'user' => ['class' => 'app\\modules\\user\\Module'],
+        'code' => ['class' => 'app\\modules\\code\\Module'],
         //'i18n' => ['class' => 'bariew\\i18nModule\\Module'],
     ],
     'params'    => [
