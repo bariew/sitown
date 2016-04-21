@@ -1,8 +1,8 @@
 {
-    "name": "bariew/yii2-cms-project",
-    "description": "Yii2 Null CMS",
-    "keywords": ["yii2", "cms", "basic"],
-    "homepage": "http://www.yii2.anabena.com/",
+    "name": "bariew/sitown",
+    "description": "Sitown project",
+    "keywords": ["yii2", "project", "sitown"],
+    "homepage": "http://www.sitown.anabena.com/",
     "type": "project",
     "license": "BSD-3-Clause",
     "support": {
@@ -56,9 +56,7 @@
                     "web/assets": "0777",
                     "web/files": "0777",
                     "web/themes": "0777",
-                    "yii": "0755",
-                    "migrations" : "0777",
-                    "modules" : "0777"
+                    "yii": "0755"
                 }
             ]
         },
