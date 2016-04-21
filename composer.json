@@ -14,9 +14,7 @@
     },
     "minimum-stability": "dev",
     "require": {
-      "php": ">=5.4.0",
-      "fxp/composer-asset-plugin": "*",
-      "yiisoft/yii2": ">=2.0.5"
+      "php": ">=5.4.0"
     },
 
     "config": {
