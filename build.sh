@@ -31,18 +31,7 @@ case "$COMMAND" in
         ;;
     init)
         cp config/local.php.example config/local.php
-        chmod 0777 web/assets
-        chmod 0777 web/files
-        chmod 0777 runtime
-        chmod 0777 web/assets
-        chmod 0777 config/local.php
-#        php composer.phar global require "codeception/codeception=2.0.*"
-#        php composer.phar global require "codeception/specify=*"
-#        php composer.phar global require "codeception/verify=*"
         php composer.phar global require "fxp/composer-asset-plugin"
-#        php composer.phar update  --no-interaction
-#        ln -s ~/.composer/vendor/bin/codecept /usr/local/bin/codecept
-#        ln -s ~/.composer/vendor/codeception $DIR/vendor/codeception
         ;;
     merge)
         BRANCH=$( git rev-parse --abbrev-ref HEAD );

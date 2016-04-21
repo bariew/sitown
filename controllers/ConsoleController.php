@@ -54,4 +54,10 @@ class ConsoleController extends Controller
     {
         \bariew\yii2Tools\tests\FixtureManager::init();
     }
+
+    public static function postCreateProject($event)
+    {
+        $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR;
+        copy($path.'local.php.example', $path.'local.php');
+    }
 }
