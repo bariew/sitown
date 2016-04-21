@@ -9,6 +9,7 @@
 namespace app\rbac;
 use Yii;
 use yii\base\Event;
+use yii\rbac\Role;
 use yii\web\HttpException;
 
 class EventHandler
@@ -21,8 +22,12 @@ class EventHandler
     public static function beforeActionAccess($event)
     {
         $controller = $event->sender;
+//        if ($id = Yii::$app->user->id) {
+//            Yii::$app->authManager->assign((new Role(['name' => 'default'])), $id);
+//        }
+
         if (!static::checkAccess([$controller->module->id, $controller->id, $controller->action->id])) {
-            throw new HttpException(403, Yii::t('rbac', 'Access denied'));
+            throw new HttpException(403, Yii::t('app/rbac', 'Access denied'));
         }
     }
 

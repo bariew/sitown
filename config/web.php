@@ -4,7 +4,7 @@
     'language'  => 'ru',
     'timeZone' => 'Europe/Moscow',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'authManager'],
     'components' => [
         'db' => [
             'class' => '\\yii\\db\\Connection',
@@ -36,10 +36,13 @@
         'i18n'  => [
             'class' => 'bariew\i18nModule\components\I18N',
             'translations' => [
-                'modules/*' => [
+                'app' => [
                     'class' => 'yii\i18n\DbMessageSource',
                 ],
-                'app' => [
+                'app/*' => [
+                    'class' => 'yii\i18n\DbMessageSource',
+                ],
+                'modules/*' => [
                     'class' => 'yii\i18n\DbMessageSource',
                 ],
             ],
@@ -60,7 +63,7 @@
             'events' => [
                 'yii\web\Controller' => [
                     'beforeAction' => [
-                        //['bariew\rbacModule\components\EventHandlers', 'beforeActionAccess']
+                        ['app\rbac\EventHandler', 'beforeActionAccess']
                     ]
                 ],
                 'yii\web\Response' => [
@@ -75,11 +78,11 @@
             'cookieValidationKey'   => 'someValidationKey'
         ],
         'authManager'   => [
-            'class' => 'yii\rbac\PhpManager',
+            'class' => 'app\rbac\PhpManager',
             'defaultRoles' => [
-                'site/error', 'page/default/view', 'user/default/logout',
-                'user/default/login', 'user/default/register', 'user/default/auth',
-                'user/default/confirm'
+                'app/site/error', 'app/site/index',
+                'page/default/view',
+                'user/default/logout', 'user/default/login',
             ]
         ],
         'cache' => [

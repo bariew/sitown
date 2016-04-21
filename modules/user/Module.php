@@ -21,7 +21,7 @@ class Module extends \yii\base\Module
                   'url' => ['/user/default/login']
               ]
             : [
-                  'label'    => Yii::$app->user->identity->username,
+                  'label'    => Yii::$app->user->identity->email,
                   'items' => [
                       ['label'    => 'Profile', 'url' => ['/user/default/update']],
                       ['label'    => 'Logout', 'url' => ['/user/default/logout']],
