@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use bariew\yii2Tools\helpers\GridHelper;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\poll\models\Question */
@@ -29,12 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'status',
-            'type',
+            GridHelper::listFormat($model, 'status'),
+            GridHelper::listFormat($model, 'type'),
             'relation_id',
             'title',
             'description:ntext',
-            'created_at',
+            'created_at:date',
         ],
     ]) ?>
 

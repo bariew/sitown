@@ -8,19 +8,19 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 $index = $model->id ? : 'new-'.$index;
 $form = isset($form) ? $form : new \bariew\yii2Tools\widgets\ActiveForm(['init' => false]);
-?>
+$deleteLink = Html::a('<em class="glyphicon glyphicon-trash"></em>',
+    ["/poll/answer/delete", 'id' => $model->id],
+    [
+        'class' => 'btn btn-default',
+        'onclick' =>  '
+                $.get($(this).attr("href")),
+                $(this).parent().parent().fadeOut().remove();
+                $.colorbox.resize();
+                return false;
+            '
+    ]
+);?>
 
-<div class="answer-form">
-    <?= $form->field($model, "[$index]title")->textInput(['maxlength' => true]) ?>
-    <?= Html::a('<em class="glyphicon glyphicon-trash"></em>',
-        ["material-rule/delete", 'id' => $model->id],
-        [
-            'class' => 'btn btn-default',
-            'onclick' =>  '
-                        $.get($(this).attr("href")),
-                        $(this).parents("table").fadeOut().remove();
-                        $.colorbox.resize();
-                        return false;
-                    '
-        ]) ?>
+<div class="answer-form form-inline">
+    <?= $form->field($model, "[$index]title", ['template' => "{input}{$deleteLink}{error}"])->label(false)->textInput(['maxlength' => true]) ?>
 </div>

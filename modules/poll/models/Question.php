@@ -22,6 +22,8 @@ use yii\web\JsExpression;
  * @property integer $created_at
  *
  * @property Answer[] $answers
+ *
+ * @mixin AttachedRelationBehavior
  */
 class Question extends \yii\db\ActiveRecord
 {
@@ -47,6 +49,7 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['type', 'status', 'title'], 'required'],
             [['description'], 'string'],
             [['relation_id', 'title'], 'string', 'max' => 255],
             [['type', 'status'], ListValidator::className()],
