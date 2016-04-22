@@ -26,18 +26,17 @@ class PullRequestController extends Controller
         return $this->render('index', compact('dataProvider', 'searchModel'));
     }
 
-    public function actionState($state, $number, $sha)
+    public function actionState()
     {
-        $head = compact('sha');
-        $model = PullRequest::populate(compact('state', 'number', 'head'));
-        switch ($state) {
+        $model = (new PullRequest(\Yii::$app->request->post()));
+        switch ($model->state) {
             case 'open' : return is_array($model->reopen());
                 break;
             case 'closed': return is_array($model->close());
                 break;
             case '':
                 if (!$model->getPoll()->isSuccess()) {
-                    throw new HttpException(403);
+                    throw new HttpException(403, "The poll is not success yet");
                 }
                 return is_array($model->merge());
         }

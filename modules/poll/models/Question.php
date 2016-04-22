@@ -3,6 +3,7 @@
 namespace app\modules\poll\models;
 
 use app\modules\code\models\PullRequest;
+use bariew\yii2Tools\behaviors\AttachedRelationBehavior;
 use bariew\yii2Tools\validators\ListValidator;
 use Yii;
 use yii\behaviors\TimestampBehavior;
@@ -82,9 +83,16 @@ class Question extends \yii\db\ActiveRecord
             [
                 'class' => TimestampBehavior::className(),
                 'attributes' => [static::EVENT_BEFORE_INSERT => ['created_at'],]
+            ],
+            'attachedRelations' => [
+                'class' => AttachedRelationBehavior::className(),
+                'relations' => ['answers']
             ]
         ];
     }
+
+    /** For form validation */
+    public function setAnswers() {}
 
     /**
      * Available type list

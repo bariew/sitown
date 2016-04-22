@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::dropDownList('state', $data->state, $data->stateList(), [
                         'href' => \yii\helpers\Url::to(['/code/pull-request/state']),
                         'prompt' => 'merge',
-                        'onchange' => 'var e = $(this); $.get(e.attr("href"), {
+                        'onchange' => 'var e = $(this); $.post(e.attr("href"), {
                             state: e.val(),
                             sha: "'.$data->sha.'",
                             number: "'.$data->number.'"
