@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use bariew\yii2Tools\helpers\GridHelper;
+use app\modules\poll\models\Question;
+use app\modules\code\models\PullRequest;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\poll\models\QuestionSearch */
@@ -27,9 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             GridHelper::listFormat($searchModel, 'status'),
             GridHelper::listFormat($searchModel, 'type'),
-            'relation_id:url',
+            'url:url',
             'created_at:date',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

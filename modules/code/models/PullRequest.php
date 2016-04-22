@@ -58,7 +58,7 @@ class PullRequest extends Model
         return $this->getGithub()->pullRequestUpdate($this->number, ['state' => 'open']);
     }
 
-    protected static function populateAll($rows)
+    public static function populateAll($rows)
     {
         $result = [];
         foreach ($rows as $row) {
@@ -67,15 +67,15 @@ class PullRequest extends Model
         return $result;
     }
 
-    protected static function populate($row)
+    public static function populate($row)
     {
         return new static([
-            'url' => $row['html_url'],
-            'title' => $row['title'],
-            'number' =>  $row['number'],
-            'state' =>  $row['state'],
-            'login' =>  $row['user']['login'],
-            'sha' =>  $row['head']['sha'],
+            'url' => @$row['html_url'],
+            'title' => @$row['title'],
+            'number' =>  @$row['number'],
+            'state' =>  @$row['state'],
+            'login' =>  @$row['user']['login'],
+            'sha' =>  @$row['head']['sha'],
         ]);
     }
 
@@ -109,6 +109,11 @@ class PullRequest extends Model
 
     public function getRelationId()
     {
-        return $this->url . '?' . $this->sha;
+        return $this->number . '_' . $this->sha;
+    }
+
+    public static function getUrl($number)
+    {
+        return static::getGithub()->pullRequestUrl($number);
     }
 }

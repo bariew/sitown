@@ -31,13 +31,30 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($data->title, $data->url, ['target' => '_blank']);
                 }
             ],
-            GridHelper::listFormat($searchModel, 'state'),
             [
                 'attribute' => 'poll',
                 'format' => 'raw',
                 'value' => function (PullRequest $data) {
                     return $data->getPoll() ? $data->getPoll()->getLink() : null;
                 }
+            ],
+            [
+                'attribute' => 'state',
+                'format' => 'raw',
+                'value' => function (PullRequest $data) {
+                    return Html::dropDownList('state', $data->state, $data->stateList(), [
+                        'href' => \yii\helpers\Url::to(['/code/pull-request/state']),
+                        'prompt' => 'merge',
+                        'onchange' => 'var e = $(this); $.get(e.attr("href"), {
+                            state: e.val(),
+                            sha: "'.$data->sha.'",
+                            number: "'.$data->number.'"
+                        })
+                        .success(function(data){ e.addClass("bg-success"); })
+                        .error(function(data){ e.addClass("bg-danger"); });'
+                    ]);
+                },
+                'filter' => PullRequest::stateList()
             ],
         ],
     ]); ?>

@@ -96,6 +96,11 @@ class Github extends Component
         $result = $this->api->pullRequest()->all($this->owner, $this->repository, $params);
         return $result;
     }
+
+    public function pullRequestUrl($number)
+    {
+        return "https://github.com/{$this->owner}/{$this->repository}/pull/{$number}";
+    }
 }
 /**
 Array

@@ -154,5 +154,16 @@ class Question extends \yii\db\ActiveRecord
         );
     }
 
+    public function getUrl()
+    {
+        if ($this->type != static::TYPE_CODE_POLL_REQUEST) {
+            return null;
+        }
+        return PullRequest::getUrl(preg_replace('/^(\d+)_.*$/', '$1', $this->relation_id));
+    }
 
+    public function isSuccess()
+    {
+        return $this->status == static::STATUS_SUCCESS;
+    }
 }
