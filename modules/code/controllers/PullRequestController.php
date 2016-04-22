@@ -16,10 +16,12 @@ class PullRequestController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index', ['dataProvider' => (new PullRequest())->search([
+        $searchModel = new PullRequest();
+        $searchModel->load(\Yii::$app->request->get());
+        $dataProvider = $searchModel->search([
             'page' => @$_GET['page'] ?:1,
             'per_page' => @$_GET['per_page'] ?:30,
-            //'q' => 'is:open+is:pr'
-        ])]);
+        ]);
+        return $this->render('index', compact('dataProvider', 'searchModel'));
     }
 }

@@ -18,7 +18,7 @@ return [
         ]),
         'i18n'          => $mainConfig['components']['i18n'],
         'event'         => $mainConfig['components']['event'],
-        'view'          => $mainConfig['components']['view'],
+        //'view'          => $mainConfig['components']['view'],
         'formatter'     => $mainConfig['components']['formatter'],
         'log'           => $mainConfig['components']['log'],
         'github'           => $mainConfig['components']['github'],
