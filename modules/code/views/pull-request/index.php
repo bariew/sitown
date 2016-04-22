@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use bariew\yii2Tools\helpers\GridHelper;
+use app\modules\code\models\PullRequest;
+
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
@@ -30,6 +32,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             GridHelper::listFormat($searchModel, 'state'),
+            [
+                'attribute' => 'poll',
+                'format' => 'raw',
+                'value' => function (PullRequest $data) {
+                    return $data->getPoll() ? $data->getPoll()->getLink() : null;
+                }
+            ],
         ],
     ]); ?>
 

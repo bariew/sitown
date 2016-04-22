@@ -10,6 +10,7 @@ namespace app\modules\code\models;
 
 
 use app\modules\code\components\Github;
+use app\modules\poll\models\Question;
 use yii\base\Model;
 use yii\data\ArrayDataProvider;
 
@@ -23,6 +24,7 @@ class PullRequest extends Model
     public $state = self::STATE_OPEN;
     public $isNewRecord = true;
 
+    private static $_polls;
 
     public function rules()
     {
@@ -44,6 +46,16 @@ class PullRequest extends Model
     public function merge($message = null)
     {
         return $this->getGithub()->pullRequestMerge($this->number, $this->sha, $message);
+    }
+
+    public function close()
+    {
+        return $this->getGithub()->pullRequestUpdate($this->number, ['state' => 'closed']);
+    }
+
+    public function reopen()
+    {
+        return $this->getGithub()->pullRequestUpdate($this->number, ['state' => 'open']);
     }
 
     protected static function populateAll($rows)
@@ -79,5 +91,24 @@ class PullRequest extends Model
     public static function getGithub()
     {
         return \Yii::$app->github;
+    }
+
+    /**
+     * @return Question
+     */
+    public function getPoll()
+    {
+        if (static::$_polls === null) {
+            static::$_polls = Question::find()
+                ->where(['type' => Question::TYPE_CODE_POLL_REQUEST])
+                ->indexBy('relation_id')
+                ->all();
+        }
+        return @static::$_polls[$this->getRelationId()];
+    }
+
+    public function getRelationId()
+    {
+        return $this->url . '?' . $this->sha;
     }
 }

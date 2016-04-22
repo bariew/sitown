@@ -32,16 +32,22 @@ AppAsset::register($this);
             'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-inverse navbar-fixed-top',
-                'style' => 'z-index: 9999;'
             ],
         ]);
-        echo \bariew\moduleModule\widgets\MenuWidget::widget([
-            'direction' => 'left',
-            'options' => ['class' => 'navbar-nav navbar-right']
+        echo \yii\bootstrap\Nav::widget([
+            'options' => ['class' => 'navbar-nav navbar'],
+            'items' => [
+                ['label' => Yii::t('app', 'Pages'), 'items' => [
+                    ['label' => Yii::t('app', 'Admin'), 'url' => ['/page/item/index']],
+                ]],
+                ['label' => Yii::t('app', 'Forum'), 'url' => ['/forum/topic/index']],
+                ['label' => Yii::t('app', 'Polls'), 'url' => ['/poll/question/index']],
+                ['label' => Yii::t('app', 'Code'), 'url' => ['/code/pull-request/index']],
+            ],
         ]);
-
         NavBar::end();
         ?>
+
         <div class="container">
             <?= Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

@@ -11,10 +11,8 @@ class m160422_014950_forum_topic extends Migration
         $this->createTable(Topic::tableName(), [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer(),
-            'type' => $this->smallInteger(),
             'title' => $this->string(),
             'description' => $this->text(),
-            'pull_request_url' => $this->string(),
             'created_at' => $this->integer(),
         ]);
         MigrationHelper::addForeignKey(Topic::tableName(), 'user_id', \app\modules\user\models\User::tableName(), 'id');

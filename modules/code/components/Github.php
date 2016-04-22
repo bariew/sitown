@@ -76,6 +76,20 @@ class Github extends Component
         }
         return $result;
     }
+    /**
+     * @param $id
+     * @param array $params like ["state" => "closed"]
+     * @return array
+     */
+    public function pullRequestUpdate($id, $params = [])
+    {
+        try {
+            $result = $this->api->pullRequest()->update($this->owner, $this->repository, $id, $params);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+        return $result;
+    }
 
     public function pullRequestList($params = [])
     {

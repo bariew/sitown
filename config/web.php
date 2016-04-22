@@ -149,8 +149,9 @@
         'page' => ['class' => 'bariew\\pageModule\\Module'],
         'user' => ['class' => 'app\\modules\\user\\Module'],
         'code' => ['class' => 'app\\modules\\code\\Module'],
-        'forum' => ['class' => 'app\\modules\\forum\\Module'],
-        //'i18n' => ['class' => 'bariew\\i18nModule\\Module'],
+        'forum'=> ['class' => 'app\\modules\\forum\\Module'],
+        'poll' => ['class' => 'app\\modules\\poll\\Module'],
+        'i18n' => ['class' => 'bariew\\i18nModule\\Module'],
     ],
     'params'    => [
         'baseUrl' => 'mysite.com',
