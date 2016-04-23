@@ -6,6 +6,7 @@ use app\modules\code\models\PullRequest;
 use bariew\yii2Tools\behaviors\AttachedRelationBehavior;
 use bariew\yii2Tools\validators\ListValidator;
 use Yii;
+use yii\base\Event;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\Html;
 use yii\web\JsExpression;
@@ -22,6 +23,7 @@ use yii\web\JsExpression;
  * @property integer $created_at
  *
  * @property Answer[] $answers
+ * @property Vote[] $votes
  *
  * @mixin AttachedRelationBehavior
  */
@@ -49,15 +51,13 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type', 'status', 'title'], 'required'],
+            [['status', 'title'], 'required'],
             [['description'], 'string'],
             [['relation_id', 'title'], 'string', 'max' => 255],
-            [['type', 'status'], ListValidator::className()],
+            [['status'], ListValidator::className()],
             ['relation_id', 'required', 'when' => function(Question $data){
                 return $data->type == Question::TYPE_CODE_POLL_REQUEST;
-            }, 'whenClient' => new JsExpression('function(){
-                return $("#question-type").val() == ' . static::TYPE_CODE_POLL_REQUEST.';
-            }')]
+            }]
         ];
     }
 
@@ -153,14 +153,35 @@ class Question extends \yii\db\ActiveRecord
      */
     public function getAnswers()
     {
-        return $this->hasMany(Answer::className(), ['question_id' => 'id']);
+        return $this->hasMany(Answer::className(), ['question_id' => 'id'])
+            ->joinWith('votes')
+            ->groupBy('id')
+            ->addSelect(['*', 'voteCount' => 'count(user_id)']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getVotes()
+    {
+        return $this->hasMany(Vote::className(), ['answer_id' => 'id'])->via('answers');
+    }
+
+    /**
+     * @param null $user_id
+     * @return Vote|null
+     */
+    public function getUserVote($user_id = null)
+    {
+        $user_id = $user_id ?: Yii::$app->user->id;
+        return $this->getVotes()->andWhere(compact('user_id'))->one();
     }
 
     public function getLink()
     {
         return Html::a(
             static::statusList()[$this->status],
-            ['/poll/question/view', 'id' => $this->id],
+            ['/poll/default/view', 'id' => $this->id],
             ['class' => 'bg-'.static::statusLabelList()[$this->status]]
         );
     }
@@ -176,5 +197,10 @@ class Question extends \yii\db\ActiveRecord
     public function isSuccess()
     {
         return $this->status == static::STATUS_SUCCESS;
+    }
+
+    public function close()
+    {
+
     }
 }

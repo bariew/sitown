@@ -17,7 +17,7 @@ class m160422_014959_forum_message extends Migration
             'created_at' => $this->integer(),
         ]);
         MigrationHelper::addForeignKey(Message::tableName(), 'user_id', \app\modules\user\models\User::tableName(), 'id');
-        MigrationHelper::addForeignKey(Message::tableName(), 'topic_id', Topic::tableName(), 'id');
+        MigrationHelper::addForeignKey(Message::tableName(), 'topic_id', Topic::tableName(), 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()

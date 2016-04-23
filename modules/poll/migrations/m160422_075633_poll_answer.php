@@ -15,7 +15,7 @@ class m160422_075633_poll_answer extends Migration
             'question_id' => $this->integer(),
             'title' => $this->string(),
         ]);
-        MigrationHelper::addForeignKey($table, 'question_id', Question::tableName(), 'id');
+        MigrationHelper::addForeignKey($table, 'question_id', Question::tableName(), 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()

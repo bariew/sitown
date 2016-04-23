@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\modules\poll\models\Answer;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\poll\models\Question */
@@ -18,14 +19,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'status')->dropDownList($model::statusList()) ?>
 
-    <?= $form->field($model, 'type')->dropDownList($model::typeList()) ?>
-
-    <?= $form->field($model, 'relation_id')->dropDownList($model::pollList(), ['prompt' => '']) ?>
-
-    <div class="form-group">
-        <?= Html::a(Yii::t('modules/poll', 'Add answer'), ['/poll/answer/create'], [
-            'class' => 'btn btn-primary',
-            'onclick' => '
+    <?php if($model->type == $model::TYPE_DEFAULT) : ?>
+        <div class="form-group">
+            <?= Html::a(Yii::t('modules/poll', 'Add answer'), ['/poll/answer/create'], [
+                'class' => 'btn btn-primary',
+                'onclick' => '
                 var e = $(this);
                 $.get(e.prop("href"), function(data){
                     e.next().append(data);
@@ -33,16 +31,25 @@ use yii\widgets\ActiveForm;
                 });
                 return false;
             '
-        ]) ?>
+            ]) ?>
 
-        <div class="question-answers">
-            <br />
-            <?php foreach($model->getRelationSavingModels('answers') as $index => $answer): ?>
-                <?= $this->render('../answer/_form',
-                    ['model' => $answer, 'index' => $index, 'form' => $form]) ?>
-            <?php endforeach; ?>
+            <div class="question-answers">
+                <br />
+                <?php foreach($model->getRelationSavingModels('answers') as $index => $answer): ?>
+                    <?= $this->render('../answer/_form', ['model' => $answer, 'index' => $index, 'form' => $form]) ?>
+                <?php endforeach; ?>
+            </div>
         </div>
-    </div>
+    <?php else: ?>
+        <?= $form->field($model, 'relation_id')->dropDownList($model::pollList()) ?>
+        <?php if($model->isNewRecord) : ?>
+            <div class="hide">
+                <?php foreach([Yii::t('modules/poll', 'No'), Yii::t('modules/poll', 'Yes')] as $index => $title): ?>
+                    <?= $this->render('../answer/_form', ['model' => new Answer(compact('title')), 'index' => $index, 'form' => $form]) ?>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('modules/poll', 'Save'), ['class' => 'btn btn-success  pull-right']) ?>

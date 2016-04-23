@@ -59,11 +59,12 @@ class QuestionController extends Controller
     /**
      * Creates a new Question model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $type
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($type)
     {
-        $model = new Question();
+        $model = new Question(compact('type'));
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

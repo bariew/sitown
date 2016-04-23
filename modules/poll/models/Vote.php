@@ -4,6 +4,7 @@ namespace app\modules\poll\models;
 
 use app\modules\user\models\User;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%poll_vote}}".
@@ -12,8 +13,9 @@ use Yii;
  * @property integer $user_id
  * @property integer $created_at
  *
+ * @property Question $question
  * @property Answer $answer
- * @property UserUser $user
+ * @property User $user
  */
 class Vote extends \yii\db\ActiveRecord
 {
@@ -30,7 +32,9 @@ class Vote extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [];
+        return [
+            ['answer_id', 'integer']
+        ];
     }
 
     /**
@@ -43,6 +47,36 @@ class Vote extends \yii\db\ActiveRecord
             'user_id' => Yii::t('modules/poll', 'User ID'),
             'created_at' => Yii::t('modules/poll', 'Created At'),
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [static::EVENT_BEFORE_INSERT => ['created_at'],]
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        $this->user_id = $this->user_id ? : Yii::$app->user->id;
+        return parent::beforeSave($insert);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getQuestion()
+    {
+        return $this->hasOne(Question::className(), ['id' => 'question_id'])->via('answer');
     }
 
     /**

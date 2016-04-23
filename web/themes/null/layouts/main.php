@@ -37,12 +37,14 @@ AppAsset::register($this);
         echo \yii\bootstrap\Nav::widget([
             'options' => ['class' => 'navbar-nav navbar'],
             'items' => [
-                ['label' => Yii::t('app', 'Pages'), 'items' => [
-                    ['label' => Yii::t('app', 'Admin'), 'url' => ['/page/item/index']],
+                ['label' => Yii::t('app', 'Forum'), 'url' => ['/forum/default/index']],
+                ['label' => Yii::t('app', 'Polls'), 'url' => ['/poll/default/index']],
+                ['label' => Yii::t('app', 'Admin'), 'items' => [
+                    ['label' => Yii::t('app', 'Pages'), 'url' => ['/page/item/index']],
+                    ['label' => Yii::t('app', 'Forum'), 'url' => ['/forum/topic/index']],
+                    ['label' => Yii::t('app', 'Polls'), 'url' => ['/poll/question/index']],
+                    ['label' => Yii::t('app', 'Code'), 'url' => ['/code/pull-request/index']],
                 ]],
-                ['label' => Yii::t('app', 'Forum'), 'url' => ['/forum/topic/index']],
-                ['label' => Yii::t('app', 'Polls'), 'url' => ['/poll/question/index']],
-                ['label' => Yii::t('app', 'Code'), 'url' => ['/code/pull-request/index']],
             ],
         ]);
         NavBar::end();

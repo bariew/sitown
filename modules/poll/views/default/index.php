@@ -14,24 +14,14 @@ $this->title = Yii::t('modules/poll', 'Questions');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="question-index">
-
     <h1><?= Html::encode($this->title) ?></h1>
-    <p>
-        <?= \bariew\yii2Tools\helpers\HtmlHelper::linkDropdown(Yii::t('modules/poll', 'Create Question'), array_map(
-            function(&$v) { return $v = ['/poll/question/create', 'type' => $v];},
-            array_flip($searchModel::typeList())
-        )) ?>
-    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             'title',
-            GridHelper::listFormat($searchModel, 'status'),
-            GridHelper::listFormat($searchModel, 'type'),
             'url:url',
             'created_at:date',
-            ['class' => 'yii\grid\ActionColumn'],
+            'link:raw'
         ],
     ]); ?>
 </div>

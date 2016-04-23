@@ -1,6 +1,6 @@
 <?php return \yii\helpers\ArrayHelper::merge([
     'id' => 'app',
-    'name'  => 'NullCMS',
+    'name'  => 'Sitown',
     'language'  => 'ru',
     'timeZone' => 'Europe/Moscow',
     'basePath' => dirname(__DIR__),
