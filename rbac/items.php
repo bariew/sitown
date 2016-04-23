@@ -2,33 +2,32 @@
     'default' => [
         'type' => 1,
         'children' => [
-            'user/default/update',
-        ],
-    ],
-    'user_admin' => [
-        'type' => 1,
-        'children' => [
-            'user/user/index',
-            'user/user/create',
-            'user/user/update',
-            'user/user/view',
+            'user/default/*',
         ],
 //        'description' => 'Member',
 //        'ruleName' => 'member',
 //        'data' => NULL,
     ],
-    'user/user/index' => ['type' => 2],
-    'user/user/create' => ['type' => 2],
-    'user/user/update' => ['type' => 2],
-    'user/user/view' => ['type' => 2],
+    'user_admin' => ['type' => 1, 'children' => ['user/*/*']],
+    'code_admin' => ['type' => 1, 'children' => ['code/*/*']],
+    'poll_admin' => ['type' => 1, 'children' => ['poll/*/*']],
+    'forum_admin'=> ['type' => 1, 'children' => ['forum/*/*']],
+    'page_admin' => ['type' => 1, 'children' => ['page/*/*']],
 
     // guest
-    'app/site/error' => ['type' => 2],
-    'app/site/index' => ['type' => 2],
-    'page/default/view' => ['type' => 2],
-    'user/default/logout' => ['type' => 2],
-    'user/default/login' => ['type' => 2],
+    'app/site/error'        => ['type' => 2],
+    'app/site/index'        => ['type' => 2],
+    'page/default/view'     => ['type' => 2],
+    'user/default/logout'   => ['type' => 2],
+    'user/default/login'    => ['type' => 2],
 
     //default
-    'user/default/update' => ['type' => 2],
+    'user/default/*'        => ['type' => 2],
+
+    //admin
+    'user/*/*' => ['type' => 2],
+    'code/*/*' => ['type' => 2],
+    'poll/*/*' => ['type' => 2],
+    'forum/*/*'=> ['type' => 2],
+    'page/*/*' => ['type' => 2],
 ];

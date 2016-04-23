@@ -153,10 +153,7 @@ class Question extends \yii\db\ActiveRecord
      */
     public function getAnswers()
     {
-        return $this->hasMany(Answer::className(), ['question_id' => 'id'])
-            ->joinWith('votes')
-            ->groupBy('id')
-            ->addSelect(['*', 'voteCount' => 'count(user_id)']);
+        return $this->hasMany(Answer::className(), ['question_id' => 'id']);
     }
 
     /**
@@ -197,6 +194,11 @@ class Question extends \yii\db\ActiveRecord
     public function isSuccess()
     {
         return $this->status == static::STATUS_SUCCESS;
+    }
+
+    public function isOpen()
+    {
+        return $this->status == static::STATUS_OPEN;
     }
 
     public function close()

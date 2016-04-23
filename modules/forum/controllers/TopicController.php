@@ -2,20 +2,33 @@
 
 namespace app\modules\forum\controllers;
 
-
-use app\modules\forum\models\Message;
-use app\modules\forum\models\MessageSearch;
 use Yii;
 use app\modules\forum\models\Topic;
 use app\modules\forum\models\TopicSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
 /**
- * Default controller for the `forum` module
+ * TopicController implements the CRUD actions for Topic model.
  */
-class DefaultController extends Controller
+class TopicController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
+
     /**
      * Lists all Topic models.
      * @return mixed
@@ -38,13 +51,8 @@ class DefaultController extends Controller
      */
     public function actionView($id)
     {
-        $message = new Message(['topic_id' => $id]);
-        if ($message->load(Yii::$app->request->post(), 'MessageSearch') && $message->save()) {
-            Yii::$app->session->addFlash('success', Yii::t('app', 'Success'));
-        }
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'message' => new MessageSearch(['topic_id' => $id]), // for search
         ]);
     }
 

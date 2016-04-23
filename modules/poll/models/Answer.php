@@ -19,6 +19,7 @@ use Yii;
 class Answer extends \yii\db\ActiveRecord
 {
     public $voteCount;
+    public $voteWinner;
 
     /**
      * @inheritdoc

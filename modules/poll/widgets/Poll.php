@@ -12,6 +12,7 @@ namespace app\modules\poll\widgets;
 use yii\base\Widget;
 use app\modules\poll\models\Question;
 use app\modules\poll\models\Vote;
+use Yii;
 
 class Poll extends Widget
 {
@@ -22,8 +23,17 @@ class Poll extends Widget
     {
         $vote = $this->question->getUserVote() ? : new Vote();
         if ($vote->isNewRecord && $vote->load(\Yii::$app->request->post()) && $vote->save()) {
-            \Yii::$app->controller->refresh();
+            Yii::$app->controller->refresh();
+            Yii::$app->end();
         }
-        return $this->render('poll', ['model' => $vote, 'question' => $this->question]);
+        $answerQuery = $this->question->getAnswers()
+            ->joinWith('votes')
+            ->addSelect(['*', 'voteCount' => 'count(user_id)'])
+            ->groupBy('id');
+        return $this->render('poll', [
+            'model' => $vote,
+            'question' => $this->question,
+            'answers' => $answerQuery->all(),
+        ]);
     }
 }

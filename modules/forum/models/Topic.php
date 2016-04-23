@@ -2,23 +2,24 @@
 
 namespace app\modules\forum\models;
 
+use app\modules\user\models\User;
+use bariew\yii2Tools\behaviors\OwnerBehavior;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "{{%forum_topic}}".
+ * This is the model class for table "forum_topic".
  *
  * @property integer $id
  * @property integer $user_id
- * @property integer $type
  * @property string $title
  * @property string $description
- * @property string $pull_request_url
  * @property integer $created_at
  *
- * @property ForumMessage[] $forumMessages
- * @property UserUser $user
- * @property ForumVote[] $forumVotes
- * @property UserUser[] $users
+ * @property Message[] $forumMessages
+ * @property User $user
+ *
+ * @mixin OwnerBehavior
  */
 class Topic extends \yii\db\ActiveRecord
 {
@@ -27,7 +28,7 @@ class Topic extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%forum_topic}}';
+        return 'forum_topic';
     }
 
     /**
@@ -36,10 +37,8 @@ class Topic extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'type', 'created_at'], 'integer'],
             [['description'], 'string'],
-            [['title', 'pull_request_url'], 'string', 'max' => 255],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserUser::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['title'], 'string', 'max' => 255],
         ];
     }
 
@@ -51,20 +50,32 @@ class Topic extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('modules/forum', 'ID'),
             'user_id' => Yii::t('modules/forum', 'User ID'),
-            'type' => Yii::t('modules/forum', 'Type'),
             'title' => Yii::t('modules/forum', 'Title'),
             'description' => Yii::t('modules/forum', 'Description'),
-            'pull_request_url' => Yii::t('modules/forum', 'Pull Request Url'),
             'created_at' => Yii::t('modules/forum', 'Created At'),
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [static::EVENT_BEFORE_INSERT => ['created_at'],]
+            ],
+            OwnerBehavior::className()
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getForumMessages()
+    public function getMessages()
     {
-        return $this->hasMany(ForumMessage::className(), ['topic_id' => 'id']);
+        return $this->hasMany(Message::className(), ['topic_id' => 'id']);
     }
 
     /**
@@ -72,22 +83,15 @@ class Topic extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(UserUser::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Available user list
+     * @return array
      */
-    public function getForumVotes()
+    public static function userList()
     {
-        return $this->hasMany(ForumVote::className(), ['topic_id' => 'id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsers()
-    {
-        return $this->hasMany(UserUser::className(), ['id' => 'user_id'])->viaTable('{{%forum_vote}}', ['topic_id' => 'id']);
+        return User::listAll();
     }
 }

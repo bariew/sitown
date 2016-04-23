@@ -22,10 +22,6 @@ class EventHandler
     public static function beforeActionAccess($event)
     {
         $controller = $event->sender;
-//        if ($id = Yii::$app->user->id) {
-//            Yii::$app->authManager->assign((new Role(['name' => 'default'])), $id);
-//        }
-
         if (!static::checkAccess([$controller->module->id, $controller->id, $controller->action->id])) {
             throw new HttpException(403, Yii::t('app/rbac', 'Access denied'));
         }
@@ -33,12 +29,17 @@ class EventHandler
 
     /**
      * Check whether the user has access to permission.
-     * @param mixed $permissionName permission name or its components for self::createPermissionName.
+     * @param array $route permission name or its components for self::createPermissionName.
      * @return boolean whether user has access to permission name.
      */
-    private static function checkAccess($permissionName)
+    private static function checkAccess($route)
     {
-        $permissionName = is_array($permissionName) ? implode('/', $permissionName) : $permissionName;
-        return \Yii::$app->user->can($permissionName);
+        $permission = implode('/', $route);
+        $anyActionPermission = preg_replace('/(.*\/)\w+$/', '$1*', $permission);
+        $anyControllerPermission = preg_replace('/(.*\/)\w+\/\*$/', '$1*/*', $permission);
+        return
+            \Yii::$app->user->can($anyControllerPermission)
+            || \Yii::$app->user->can($anyActionPermission)
+            || \Yii::$app->user->can($permission);
     }
 }

@@ -74,6 +74,16 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * @return array
+     */
+    public static function listAll()
+    {
+        return static::find()->indexBy('id')
+            ->select(['(CONCAT("user_",id))'])
+            ->column();
+    }
+
+    /**
      * @inheritdoc
      */
     public static function findIdentity($id)

@@ -2,10 +2,13 @@
 
 namespace app\modules\forum\models;
 
+use app\modules\user\models\User;
+use bariew\yii2Tools\behaviors\OwnerBehavior;
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "{{%forum_message}}".
+ * This is the model class for table "forum_message".
  *
  * @property integer $id
  * @property integer $user_id
@@ -13,8 +16,10 @@ use Yii;
  * @property string $content
  * @property integer $created_at
  *
- * @property ForumTopic $topic
- * @property UserUser $user
+ * @property Topic $topic
+ * @property User $user
+ *
+ * @mixin OwnerBehavior
  */
 class Message extends \yii\db\ActiveRecord
 {
@@ -23,7 +28,7 @@ class Message extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%forum_message}}';
+        return 'forum_message';
     }
 
     /**
@@ -32,10 +37,7 @@ class Message extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'topic_id', 'created_at'], 'integer'],
             [['content'], 'string'],
-            [['topic_id'], 'exist', 'skipOnError' => true, 'targetClass' => ForumTopic::className(), 'targetAttribute' => ['topic_id' => 'id']],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => UserUser::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -54,11 +56,25 @@ class Message extends \yii\db\ActiveRecord
     }
 
     /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'attributes' => [static::EVENT_BEFORE_INSERT => ['created_at'],]
+            ],
+            OwnerBehavior::className(),
+        ];
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getTopic()
     {
-        return $this->hasOne(ForumTopic::className(), ['id' => 'topic_id']);
+        return $this->hasOne(Topic::className(), ['id' => 'topic_id']);
     }
 
     /**
@@ -66,6 +82,26 @@ class Message extends \yii\db\ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(UserUser::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * Available user list
+     * @return array
+     */
+    public static function userList()
+    {
+        return User::listAll();
+    }
+
+    /**
+     * @return array
+     */
+    public static function topicList()
+    {
+        return Topic::find()
+            ->indexBy('id')
+            ->select('title')
+            ->column();
     }
 }
