@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use bariew\yii2Tools\helpers\GridHelper;
+use app\modules\forum\models\Message;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\forum\models\Topic */
@@ -31,10 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'summary' => false,
         'showHeader' => false,
         'columns' => [
-            'content',
             GridHelper::listFormat($message, 'user_id', [
                 'options' => ['style' => 'width:60px']
             ]),
+            'content',
         ],
     ]); ?>
 

@@ -40,7 +40,7 @@ class DefaultController extends Controller
     {
         $message = new Message(['topic_id' => $id]);
         if ($message->load(Yii::$app->request->post(), 'MessageSearch') && $message->save()) {
-            Yii::$app->session->addFlash('success', Yii::t('app', 'Success'));
+            //Yii::$app->session->addFlash('success', Yii::t('app', 'Success'));
         }
         return $this->render('view', [
             'model' => $this->findModel($id),
@@ -83,19 +83,6 @@ class DefaultController extends Controller
                 'model' => $model,
             ]);
         }
-    }
-
-    /**
-     * Deletes an existing Topic model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
     }
 
     /**
