@@ -14,7 +14,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
     <h3><?= $question->title ?></h3>
-    <p><?= $question->description ?></p>
+    <p><?= \yii\helpers\Markdown::process($question->description); ?></p>
     <table class="table table-stripped">
         <tbody>
         <?php foreach($answers as $answer): ?>
