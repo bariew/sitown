@@ -23,4 +23,5 @@ $deleteLink = Html::a('<em class="glyphicon glyphicon-trash"></em>',
 
 <div class="answer-form form-inline">
     <?= $form->field($model, "[$index]title", ['template' => "{input}{$deleteLink}{error}"])->label(false)->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, "[$index]value", ['template' => "{input}{$deleteLink}{error}"])->label(false)->textInput(['maxlength' => true]) ?>
 </div>

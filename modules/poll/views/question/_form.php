@@ -19,7 +19,11 @@ use app\modules\poll\models\Answer;
 
     <?= $form->field($model, 'status')->dropDownList($model::statusList()) ?>
 
-    <?php if($model->type == $model::TYPE_DEFAULT) : ?>
+    <?php if($model->type == $model::TYPE_CODE_POLL_REQUEST) : ?>
+        <?= $form->field($model, 'relation_id')->dropDownList($model::pollList()) ?>
+    <?php endif; ?>
+
+    <?php if($model->type == $model::TYPE_CUSTOM) : ?>
         <div class="form-group">
             <?= Html::a(Yii::t('modules/poll', 'Add answer'), ['/poll/answer/create'], [
                 'class' => 'btn btn-primary',
@@ -40,15 +44,14 @@ use app\modules\poll\models\Answer;
                 <?php endforeach; ?>
             </div>
         </div>
-    <?php else: ?>
-        <?= $form->field($model, 'relation_id')->dropDownList($model::pollList()) ?>
-        <?php if($model->isNewRecord) : ?>
-            <div class="hide">
-                <?php foreach([Yii::t('modules/poll', 'No'), Yii::t('modules/poll', 'Yes')] as $index => $title): ?>
-                    <?= $this->render('../answer/_form', ['model' => new Answer(compact('title')), 'index' => $index, 'form' => $form]) ?>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+    <?php elseif($model->isNewRecord): ?>
+        <div class="hide">
+            <?php foreach([Yii::t('modules/poll', 'No'), Yii::t('modules/poll', 'Yes')] as $index => $title): ?>
+                <?= $this->render('../answer/_form', [
+                    'model' => new Answer(compact('title')), 'index' => $index, 'form' => $form
+                ]) ?>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
 
     <div class="form-group">

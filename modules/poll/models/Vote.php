@@ -3,6 +3,7 @@
 namespace app\modules\poll\models;
 
 use app\modules\user\models\User;
+use bariew\yii2Tools\behaviors\OwnerBehavior;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -16,6 +17,8 @@ use yii\behaviors\TimestampBehavior;
  * @property Question $question
  * @property Answer $answer
  * @property User $user
+ *
+ * @mixin OwnerBehavior
  */
 class Vote extends \yii\db\ActiveRecord
 {
@@ -59,16 +62,8 @@ class Vote extends \yii\db\ActiveRecord
                 'class' => TimestampBehavior::className(),
                 'attributes' => [static::EVENT_BEFORE_INSERT => ['created_at'],]
             ],
+            OwnerBehavior::className(),
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function beforeSave($insert)
-    {
-        $this->user_id = $this->user_id ? : Yii::$app->user->id;
-        return parent::beforeSave($insert);
     }
 
     /**

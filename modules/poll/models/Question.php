@@ -29,8 +29,9 @@ use yii\web\JsExpression;
  */
 class Question extends \yii\db\ActiveRecord
 {
-    const TYPE_DEFAULT = 0;
-    const TYPE_CODE_POLL_REQUEST = 1;
+    const TYPE_CUSTOM = 0;
+    const TYPE_DICHOTOMOUS = 1;
+    const TYPE_CODE_POLL_REQUEST = 2;
 
     const STATUS_OPEN = 0;
     const STATUS_CLOSED = 2;
@@ -104,7 +105,8 @@ class Question extends \yii\db\ActiveRecord
     public static function typeList()
     {
         return [
-            static::TYPE_DEFAULT => Yii::t('modules/poll', 'Default'),
+            static::TYPE_CUSTOM => Yii::t('modules/poll', 'Custom'),
+            static::TYPE_DICHOTOMOUS => Yii::t('modules/poll', 'Yes/No'),
             static::TYPE_CODE_POLL_REQUEST => Yii::t('modules/poll', 'Poll Request'),
         ];
     }

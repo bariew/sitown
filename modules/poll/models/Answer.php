@@ -11,6 +11,7 @@ use Yii;
  * @property integer $id
  * @property integer $question_id
  * @property string $title
+ * @property string $value
  *
  * @property Question $question
  * @property Vote[] $votes
@@ -36,7 +37,8 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             [['title'], 'required'],
-            [['title'], 'string', 'max' => 255],
+            [['value'], 'unique', 'filter' => ['question_id' => $this->question_id]],
+            [['title', 'value'], 'string', 'max' => 255],
         ];
     }
 
@@ -49,7 +51,20 @@ class Answer extends \yii\db\ActiveRecord
             'id' => Yii::t('modules/poll', 'ID'),
             'question_id' => Yii::t('modules/poll', 'Question ID'),
             'title' => Yii::t('modules/poll', 'Title'),
+            'value' => Yii::t('modules/poll', 'Value'),
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        if (!strlen($this->value)) {
+            $this->value = $this->question->getAnswers()->count();
+        }
+
+        return parent::beforeSave($insert);
     }
 
     /**
@@ -73,6 +88,6 @@ class Answer extends \yii\db\ActiveRecord
      */
     public function getUsers()
     {
-        return $this->hasMany(User::className(), ['id' => 'user_id'])->viaTable('{{%poll_vote}}', ['answer_id' => 'id']);
+        return $this->hasMany(User::className(), ['id' => 'user_id'])->via('votes');
     }
 }

@@ -18,21 +18,6 @@
         'user' => [
             'identityClass' => 'app\\modules\\user\\models\\User',
         ],
-        'authClientCollection' => [
-            'class' => 'yii\authclient\Collection',
-            'clients' => [
-                'google' => [
-                    'class' => 'yii\authclient\clients\GoogleOAuth',
-                    'clientId' => '',
-                    'clientSecret' => '',
-                ],
-                'facebook' => [
-                    'class' => 'yii\authclient\clients\Facebook',
-                    'clientId' => '',
-                    'clientSecret' => '',
-                ],
-            ],
-        ],
         'i18n'  => [
             'class' => 'bariew\i18nModule\components\I18N',
             'translations' => [
@@ -58,32 +43,12 @@
                 '<url:\\S+>' => 'page/default/view',
             ],
         ],
-        'event' => [
-            'class'  => 'bariew\eventManager\EventManager',
-            'events' => [
-                'yii\web\Controller' => [
-                    'beforeAction' => [
-                       // ['app\rbac\EventHandler', 'beforeActionAccess']
-                    ]
-                ],
-                'yii\web\Response' => [
-                    'afterPrepare' => [
-                        //['bariew\rbacModule\components\EventHandlers', 'responseAfterPrepare']
-                    ]
-                ],
-
-            ]
-        ],
         'request'   => [
             'cookieValidationKey'   => 'someValidationKey'
         ],
         'authManager'   => [
             'class' => 'app\rbac\PhpManager',
-            'defaultRoles' => [
-                'app/site/error', 'app/site/index',
-                'page/default/view',
-                'user/default/logout', 'user/default/login',
-            ]
+            'defaultRoles' => ['app/site/.*', 'user/default/.*', 'page/default/.*']
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -102,6 +67,9 @@
 //                'port' => '465',
 //                'encryption' => 'ssl',
 //            ],
+        ],
+        'event' => [
+            'class' => 'bariew\eventManager\EventManager'
         ],
         'log' => [
             'traceLevel' => 0,
@@ -149,7 +117,6 @@
         'page' => ['class' => 'bariew\\pageModule\\Module'],
         'user' => ['class' => 'app\\modules\\user\\Module'],
         'code' => ['class' => 'app\\modules\\code\\Module'],
-        'forum'=> ['class' => 'app\\modules\\forum\\Module'],
         'poll' => ['class' => 'app\\modules\\poll\\Module'],
         'i18n' => ['class' => 'bariew\\i18nModule\\Module'],
     ],

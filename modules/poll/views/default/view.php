@@ -12,3 +12,4 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('modules/poll', 'Questions')
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?= \app\modules\poll\widgets\Poll::widget(['question' => $model]) ?>
+<?= \app\modules\poll\widgets\Comment::widget(['question' => $model]) ?>
