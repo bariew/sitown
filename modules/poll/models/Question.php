@@ -219,7 +219,23 @@ class Question extends \yii\db\ActiveRecord
 
     public function close()
     {
-
+        if ($this->status != static::STATUS_SUCCESS || (!$event = $this->event_object)) {
+            return $this->save();
+        }
+        static::$isTriggeredByPoll = true;
+        switch ($event->name) {
+            case 'beforeInsert':
+            case 'beforeUpdate':
+                $event->sender->save();
+                break;
+            case 'beforeDelete':
+                $event->sender->delete();
+                break;
+            default:
+                $method = preg_replace('#.*([A-Z][a-z]+)$#', '$1', $event->name);
+                $event->sender->$method();
+        }
+        $this->save();
     }
 
     public static function getRelationId($model)
@@ -262,7 +278,7 @@ class Question extends \yii\db\ActiveRecord
         $vote = $event->sender;
         $userCount = User::find()->count();
         $question = $vote->question;
-        $votes = $question->getVotes()->with('answer')->select('answer.value')->column();
+        $votes = $question->getVotes()->joinWith('answer')->select('answer.value')->column();
         $voteCount = count($votes);
         $voteSum = array_sum($votes);
         $voteLeft = $userCount - $voteCount;
@@ -274,6 +290,6 @@ class Question extends \yii\db\ActiveRecord
         } else {
             return;
         }
-        $question->save();
+        $question->close();
     }
 }

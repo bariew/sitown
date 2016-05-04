@@ -80,6 +80,9 @@
                     'beforeInsert' => [
                         ['app\modules\poll\models\Question', 'modelEventHandler']
                     ],
+                    'beforeUpdate' => [
+                        ['app\modules\poll\models\Question', 'modelEventHandler']
+                    ],
                 ],
                 'app\modules\page\models\Page' => [
                     'beforeInsert' => [
