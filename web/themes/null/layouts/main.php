@@ -28,22 +28,30 @@ AppAsset::register($this);
     <div class="wrap">
         <?php
         NavBar::begin([
-            'brandLabel' => Yii::$app->name,
-            'brandUrl' => Yii::$app->homeUrl,
+            //'brandLabel' => Yii::$app->name,
+            //'brandUrl' => Yii::$app->homeUrl,
             'options' => [
                 'class' => 'navbar-inverse navbar-fixed-top',
             ],
         ]);
+        echo \bariew\pageModule\widgets\MainMenu::widget([
+            'options' => ['class' => 'navbar-nav navbar nav'],
+        ]);
+        $adminMenuItems = array_map(function($v) {
+            return array_merge($v, ['visible' => Yii::$app->user->can($v['url'][0])]);
+        }, [
+            ['label' => Yii::t('app', 'Pages'), 'url' => ['/page/item/index']],
+            ['label' => Yii::t('app', 'Polls'), 'url' => ['/poll/question/index']],
+            ['label' => Yii::t('app', 'Code'),  'url' => ['/code/pull-request/index']],
+            ['label' => Yii::t('app', 'Users'), 'url' => ['/user/user/index']],
+        ]);
         echo \yii\bootstrap\Nav::widget([
             'options' => ['class' => 'navbar-nav navbar'],
             'items' => [
-                ['label' => Yii::t('app', 'Polls'), 'url' => ['/poll/default/index']],
-                ['label' => Yii::t('app', 'Admin'), 'items' => [
-                    ['label' => Yii::t('app', 'Pages'), 'url' => ['/page/item/index']],
-                    ['label' => Yii::t('app', 'Polls'), 'url' => ['/poll/question/index']],
-                    ['label' => Yii::t('app', 'Code'),  'url' => ['/code/pull-request/index']],
-                    ['label' => Yii::t('app', 'Users'), 'url' => ['/user/user/index']],
-                ]],
+                [
+                    'label' => Yii::t('app', 'Admin'),
+                    'items' => $adminMenuItems,
+                    'visible' => array_filter($adminMenuItems, function($v){return $v['visible'];})],
                 (Yii::$app->user->isGuest
                     ? ['label' => Yii::t('app', 'Login'), 'url' => ['/user/default/login']]
                     : ['label' => Yii::t('app', 'Logout'),'url' => ['/user/default/logout']]

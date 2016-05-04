@@ -37,33 +37,28 @@ class PhpManager extends \yii\rbac\PhpManager
             return;
         }
         $controller = $event->sender;
-        if (!$this->checkActionAccess($controller->module->id, $controller->id, $controller->action->id)) {
+        if (!Yii::$app->user->can($controller->module->id.'/'.$controller->id.'/'.$controller->action->id)) {
             throw new HttpException(403, Yii::t('app/rbac', 'Access denied'));
         }
     }
 
     /**
-     * Check whether the user has access to permission.
-     * @param $module
-     * @param $controller
-     * @param $action
-     * @return bool whether user has access to permission name.
-     * @internal param array $route permission name or its components for self::createPermissionName.
+     * @inheritdoc
      */
-    private function checkActionAccess($module, $controller, $action)
+    public function checkAccess($userId, $permissionName, $params = [])
     {
-        $route = "$module/$controller/$action";
+        $permissionName = preg_replace('#^\/(.*)#', '$1', $permissionName);
         foreach ($this->getPermissions() as $permission) {
             if ($permission->type == $permission::TYPE_ROLE) {
                 continue;
             }
-            if (!preg_match('#^'.$permission->name.'$#', $route)) {
+            if (!preg_match('#^'.$permission->name.'$#', $permissionName)) {
                 continue;
             }
-            if (Yii::$app->user->can($permission->name)) {
+            if (parent::checkAccess($userId, $permission->name, $params)) {
                 return true;
             }
         }
-        return false;
+        return parent::checkAccess($userId, $permissionName, $params);
     }
 }

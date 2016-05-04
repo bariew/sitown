@@ -11,11 +11,15 @@ namespace app\modules\code\models;
 
 use app\modules\code\components\Github;
 use app\modules\poll\models\Question;
+use app\modules\poll\widgets\Poll;
 use yii\base\Model;
+use yii\base\ModelEvent;
 use yii\data\ArrayDataProvider;
 
 class PullRequest extends Model
 {
+    const EVENT_BEFORE_MERGE = 'beforeMerge';
+
     const STATE_OPEN = 'open';
     const STATE_CLOSED = 'closed';
 
@@ -45,7 +49,8 @@ class PullRequest extends Model
 
     public function merge($message = null)
     {
-        return $this->getGithub()->pullRequestMerge($this->number, $this->sha, $message);
+        $this->trigger(static::EVENT_BEFORE_MERGE, new ModelEvent());
+        return !$this->errors && $this->getGithub()->pullRequestMerge($this->number, $this->sha, $message);
     }
 
     public function close()
@@ -100,14 +105,14 @@ class PullRequest extends Model
     {
         if (static::$_polls === null) {
             static::$_polls = Question::find()
-                ->where(['type' => Question::TYPE_CODE_POLL_REQUEST])
+                ->where(['like', 'relation_id', get_class($this)])
                 ->indexBy('relation_id')
                 ->all();
         }
-        return @static::$_polls[$this->getRelationId()];
+        return @static::$_polls[Question::getRelationId($this)];
     }
 
-    public function getRelationId()
+    public function getId()
     {
         return $this->number . '_' . $this->sha;
     }

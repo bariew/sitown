@@ -79,7 +79,8 @@ class Vote extends \yii\db\ActiveRecord
      */
     public function getAnswer()
     {
-        return $this->hasOne(Answer::className(), ['id' => 'answer_id']);
+        return $this->hasOne(Answer::className(), ['id' => 'answer_id'])
+            ->from(['answer' => Answer::tableName()]);
     }
 
     /**

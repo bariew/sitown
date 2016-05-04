@@ -12,6 +12,7 @@ class m160422_075623_poll_question extends Migration
             'status' => $this->smallInteger(),
             'type' => $this->smallInteger(),
             'relation_id' => $this->string(), // e.g. code pull request url + sha
+            'event_object' => $this->text(),
             'title' => $this->string(),
             'description' => $this->text(),
             'created_at' => $this->integer(),

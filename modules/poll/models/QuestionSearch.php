@@ -19,7 +19,7 @@ class QuestionSearch extends Question
     {
         return [
             [['id', 'status', 'type', 'created_at'], 'integer'],
-            [['relation_id', 'title', 'description'], 'safe'],
+            [['title', 'description'], 'safe'],
         ];
     }
 
@@ -68,8 +68,7 @@ class QuestionSearch extends Question
             'created_at' => $this->created_at,
         ]);
 
-        $query->andFilterWhere(['like', 'relation_id', $this->relation_id])
-            ->andFilterWhere(['like', 'title', $this->title])
+        $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
