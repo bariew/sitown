@@ -6,13 +6,13 @@ class m140417_081329_user_user extends \yii\db\Migration
     public function up()
     {
         $this->createTable(User::tableName(), array(
-            'id'            => 'pk',
-            'email'         => 'string',
-            'password'      => 'string',
-            'auth_key'      => 'string',
-            'created_at'    => 'integer',
-            'updated_at'    => 'integer',
-            'password_reset_token'=>'string',
+            'id'            => $this->primaryKey(),
+            'email'         => $this->string(),
+            'password'      => $this->string(),
+            'auth_key'      => $this->string(),
+            'created_at'    => $this->integer(),
+            'updated_at'    => $this->integer(),
+            'password_reset_token'=>$this->string(),
         ));
 
         $this->insert(User::tableName(), array(

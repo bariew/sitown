@@ -10,6 +10,7 @@ namespace app\modules\code\models;
 
 
 use app\modules\code\components\Github;
+use app\modules\poll\helpers\ModelHelper;
 use app\modules\poll\models\Question;
 use app\modules\poll\widgets\Poll;
 use yii\base\Model;
@@ -36,6 +37,7 @@ class PullRequest extends Model
     {
         return [
             [['state'], 'in', 'range' => array_keys(static::stateList())],
+            [['url', 'title', 'number', 'login', 'sha'], 'safe'],
         ];
     }
 
@@ -113,7 +115,7 @@ class PullRequest extends Model
                 ->indexBy('relation_id')
                 ->all();
         }
-        return @static::$_polls[Question::getRelationId($this)];
+        return @static::$_polls[ModelHelper::getRelationId($this)];
     }
 
     public function getId()

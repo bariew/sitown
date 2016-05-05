@@ -2,6 +2,8 @@
 
 namespace app\modules\poll\models;
 
+use app\modules\poll\helpers\ModelHelper;
+use app\modules\poll\Module;
 use app\modules\user\models\User;
 use bariew\yii2Tools\behaviors\AttachedRelationBehavior;
 use bariew\yii2Tools\behaviors\OwnerBehavior;
@@ -10,6 +12,7 @@ use Yii;
 use yii\base\Event;
 use yii\base\Model;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\helpers\Html;
 use yii\web\HttpException;
 
@@ -20,7 +23,7 @@ use yii\web\HttpException;
  * @property integer $user_id
  * @property integer $status
  * @property integer $type
- * @property Event $event_object
+ * @property array $event_object
  * @property string $relation_id
  * @property string $title
  * @property string $description
@@ -41,6 +44,11 @@ class Question extends \yii\db\ActiveRecord
     const STATUS_FAIL = 2;
 
     /**
+     * @var bool block for preventing app models processing if a poll before it is required
+     */
+    private static $pollBlock = true;
+
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -57,6 +65,7 @@ class Question extends \yii\db\ActiveRecord
             [['title'], 'required'],
             [['description'], 'string'],
             [['title'], 'string', 'max' => 255],
+            ['status', 'default', 'value' => static::STATUS_OPEN],
         ];
     }
 
@@ -197,20 +206,11 @@ class Question extends \yii\db\ActiveRecord
             return null;
         }
         /** @var Model $model */
-        $model = $event->sender;
-        if (isset($event->sender->pollUrl)) {
-            return $event->sender->pollUrl;
+        $model = ModelHelper::initModel($event['sender']);
+        if (isset($model->pollUrl)) {
+            return $model->pollUrl;
         }
-        return @$model->id
-            ? Yii::$app->urlManager->createAbsoluteUrl([
-                preg_replace(
-                    '#.*app\\\\modules\\\\(\w+)\\\\models\\\\(\w+)#',
-                    '/$1/$2/view',
-                    strtolower(get_class($model))
-                ),
-                'id' => $model->id
-            ])
-            : null;
+        return ModelHelper::getUrl($model);
     }
 
     public function isSuccess()
@@ -223,62 +223,67 @@ class Question extends \yii\db\ActiveRecord
         return $this->status == static::STATUS_OPEN;
     }
 
+    public function isAuto()
+    {
+        return preg_match('#^\(auto\)#', $this->title);
+    }
+
     public function close()
     {
+        static::$pollBlock = false;
         if ($this->status != static::STATUS_SUCCESS || (!$event = $this->event_object)) {
             return $this->save();
         }
-        static::$isTriggeredByPoll = true;
-        switch ($event->name) {
+        /** @var ActiveRecord $model */
+        $model = ModelHelper::initModel($event['sender']);
+        switch ($event['name']) {
             case 'beforeInsert':
             case 'beforeUpdate':
-                $event->sender->save();
+                $model->save();
+                $this->relation_id = ModelHelper::getRelationId($model);
                 break;
             case 'beforeDelete':
-                $event->sender->delete();
+                $model->delete();
                 break;
             default:
-                $method = preg_replace('#.*([A-Z][a-z]+)$#', '$1', $event->name);
-                $event->sender->$method();
+                $method = preg_replace('#.*([A-Z][a-z]+)$#', '$1', $event['name']);
+                $model->$method();
         }
         $this->save();
     }
 
-    public static function getRelationId($model)
-    {
-        return $model->id ? get_class($model).'_'.$model->id : null;
-    }
-
-    public static function getRelationTitle($model)
-    {
-        foreach (['title', 'name', 'username', 'email', 'id'] as $attribute) {
-            if (isset($model->$attribute) && ($result = $model->$attribute)) {
-                return $result;
-            }
-        }
-        return null;
-    }
-
-    private static $isTriggeredByPoll = false;
     public static function modelEventHandler(Event $event)
     {
-        /** @var Model $model */
+        /** @var ActiveRecord $model */
         $model = $event->sender;
-        if (static::$isTriggeredByPoll) {
+        if (!static::$pollBlock) {
             return;
         }
-        if (static::find()->where(['relation_id' => static::getRelationId($model), 'status' => static::STATUS_OPEN])->count()) {
-            throw new HttpException(451, Yii::t('modules/poll', "This {$model->formName()} is already involved in another poll."));
+        static::$pollBlock = false; // remove block for saving itself
+        if ($question = static::findOne(['relation_id' => ModelHelper::getRelationId($model), 'status' => static::STATUS_OPEN])) {
+            $message =  Yii::t('modules/poll', "This {$model->formName()} is already involved in another poll.");
+        } else {
+            $question = new static([
+                'title' => "(auto) ". $model->formName() . ' "'. ModelHelper::getRelationTitle($model).'" ' . $event->name,
+                'description' => ModelHelper::attributeDifference($event),
+                'status' => static::STATUS_OPEN,
+                'type' => static::TYPE_DICHOTOMOUS,
+                'relation_id' => ModelHelper::getRelationId($model),
+                'event_object' => [
+                    'name' => $event->name,
+                    'sender' => [
+                        'class' => $model::className(),
+                        'attributes' => $model->attributes,
+                        'dirtyAttributes' => isset($model->dirtyAttributes) ? $model->dirtyAttributes : [],
+                    ]
+                ],
+            ]);
+            $question->save();
+            $message = Yii::t('modules/poll', 'These changes will be applied after a successful poll.');
         }
-        (new static([
-            'title' => "(auto) ". $model->formName() . ' "'. static::getRelationTitle($model).'"',
-            'description' => "Triggered by event '{$event->name}'",
-            'status' => static::STATUS_OPEN,
-            'type' => static::TYPE_DICHOTOMOUS,
-            'relation_id' => static::getRelationId($model),
-            'event_object' => $event,
-        ]))->save();
-        throw new HttpException(451, Yii::t('modules/poll', 'These changes will be applied after a successful poll.'));
+        Yii::$app->session->setFlash('warning', $message);
+        Yii::$app->controller->redirect(['/poll/default/view', 'id' => $question->id]);
+        Yii::$app->end();
     }
 
     public static function voteAfterInsertHandler(Event $event)
@@ -292,9 +297,9 @@ class Question extends \yii\db\ActiveRecord
         $voteSum = array_sum($votes);
         $voteLeft = $userCount - $voteCount;
         $voteDiff = $voteCount - $voteSum;
-        if ($voteSum > ($voteDiff + $voteLeft)) { // negative voices can't be more than positive
+        if ($voteSum > ($voteDiff + $voteLeft)) { // negative voices can't become more than positive
             $question->status = $question::STATUS_SUCCESS;
-        } elseif ($voteSum < ($voteDiff - $voteLeft)) { // positive votes can't be more than negative
+        } elseif ($voteSum < ($voteDiff - $voteLeft)) { // positive votes can't become more than negative
             $question->status = $question::STATUS_FAIL;
         } else {
             return;

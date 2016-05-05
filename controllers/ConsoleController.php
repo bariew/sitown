@@ -8,6 +8,7 @@
 namespace app\controllers;
 
 use app\modules\code\components\Github;
+use app\modules\poll\models\Question;
 use yii\console\Controller;
 
 /**
@@ -58,8 +59,17 @@ class ConsoleController extends Controller
 
     public function actionTmp()
     {
-        /** @var Github $github */
-        $github = \Yii::$app->github;
-        $res = $github->pullRequestList();
+        $model = Question::find()->one();
+        $model->attributes = ['title' => 123];
+        $diff = new \cogpowered\FineDiff\Diff();
+        if (!isset($model->dirtyAttributes)) {
+            $old = [];
+            $new = $model->attributes;
+        } else {
+            $old = array_intersect_key($model->oldAttributes, $model->dirtyAttributes);
+            $new = array_intersect_key($model->attributes, $model->dirtyAttributes);
+        }
+
+        echo $diff->render(json_encode($old), json_encode($new));
     }
 }

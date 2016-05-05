@@ -14,7 +14,10 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
     <h3><?= $question->title ?></h3>
-    <p><?= \yii\helpers\Markdown::process($question->description); ?></p>
+    <p><?= $question->isAuto()
+            ? '<pre>'.preg_replace(['#\/#', '#Array[\s]*\(([\s\S]*)\)$#'], ['\\', '$1'], print_r($question->description, true)).'</pre>'
+            : \yii\helpers\Markdown::process($question->description);
+        ?></p>
     <table class="table table-stripped">
         <tbody>
         <?php foreach($answers as $answer): ?>

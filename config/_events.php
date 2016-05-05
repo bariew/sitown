@@ -15,7 +15,7 @@
             ['app\modules\poll\models\Question', 'modelEventHandler']
         ],
     ],
-    'app\modules\page\models\Page' => [
+    'bariew\pageModule\models\Item' => [
         'beforeInsert' => [
             ['app\modules\poll\models\Question', 'modelEventHandler']
         ],
