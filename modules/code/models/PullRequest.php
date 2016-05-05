@@ -19,6 +19,8 @@ use yii\data\ArrayDataProvider;
 class PullRequest extends Model
 {
     const EVENT_BEFORE_MERGE = 'beforeMerge';
+    const EVENT_BEFORE_CLOSE = 'beforeClose';
+    const EVENT_BEFORE_REOPEN = 'beforeReopen';
 
     const STATE_OPEN = 'open';
     const STATE_CLOSED = 'closed';
@@ -55,11 +57,13 @@ class PullRequest extends Model
 
     public function close()
     {
+        $this->trigger(static::EVENT_BEFORE_CLOSE, new ModelEvent());
         return $this->getGithub()->pullRequestUpdate($this->number, ['state' => 'closed']);
     }
 
     public function reopen()
     {
+        $this->trigger(static::EVENT_BEFORE_REOPEN, new ModelEvent());
         return $this->getGithub()->pullRequestUpdate($this->number, ['state' => 'open']);
     }
 
@@ -117,8 +121,8 @@ class PullRequest extends Model
         return $this->number . '_' . $this->sha;
     }
 
-    public static function getUrl($number)
+    public function getPollUrl()
     {
-        return static::getGithub()->pullRequestUrl($number);
+        return static::getGithub()->pullRequestUrl($this->number);
     }
 }

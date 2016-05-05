@@ -22,7 +22,7 @@ class Poll extends Widget
     public function run()
     {
         $vote = $this->question->getUserVote() ? : new Vote();
-        if ($vote->isNewRecord && $vote->load(\Yii::$app->request->post()) && $vote->save()) {
+        if ($this->question->isOpen() && $vote->isNewRecord && $vote->load(\Yii::$app->request->post()) && $vote->save()) {
             Yii::$app->controller->refresh();
             Yii::$app->end();
         }

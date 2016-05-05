@@ -1,12 +1,12 @@
 <?php
-$mainConfig = require __DIR__ . DIRECTORY_SEPARATOR . 'web.php';
+$mainConfig = require 'web.php';
 return [
     'id' => 'console',
     'bootstrap' => ['log'],
     'name'  => $mainConfig['name'],
     'language'  => $mainConfig['language'],
     'timeZone' => $mainConfig['timeZone'],
-    'basePath' => dirname(__DIR__),
+    'basePath' => $mainConfig['basePath'],
     'extensions'=> require(__DIR__ . '/../vendor/yiisoft/extensions.php'),
     'components' => [
         'db'            => $mainConfig['components']['db'],

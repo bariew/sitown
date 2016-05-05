@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             GridHelper::listFormat($searchModel, 'type'),
             'created_at:date',
             'url:url',
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{view} {delete}'],
         ],
     ]); ?>
 </div>

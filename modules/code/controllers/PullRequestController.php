@@ -35,9 +35,6 @@ class PullRequestController extends Controller
             case 'closed': return is_array($model->close());
                 break;
             case '':
-                if (!$model->getPoll()->isSuccess()) {
-                    throw new HttpException(403, "The poll is not success yet");
-                }
                 return is_array($model->merge());
         }
         return false;

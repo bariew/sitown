@@ -4,6 +4,7 @@ namespace app\modules\poll\models;
 
 use app\modules\user\models\User;
 use bariew\yii2Tools\behaviors\AttachedRelationBehavior;
+use bariew\yii2Tools\behaviors\OwnerBehavior;
 use bariew\yii2Tools\behaviors\SerializeBehavior;
 use Yii;
 use yii\base\Event;
@@ -16,6 +17,7 @@ use yii\web\HttpException;
  * This is the model class for table "{{%poll_question}}".
  *
  * @property integer $id
+ * @property integer $user_id
  * @property integer $status
  * @property integer $type
  * @property Event $event_object
@@ -92,7 +94,8 @@ class Question extends \yii\db\ActiveRecord
                 'class' => SerializeBehavior::className(),
                 'type' => SerializeBehavior::TYPE_PHP,
                 'attributes' => ['event_object']
-            ]
+            ],
+            OwnerBehavior::className(),
         ];
     }
 
@@ -195,6 +198,9 @@ class Question extends \yii\db\ActiveRecord
         }
         /** @var Model $model */
         $model = $event->sender;
+        if (isset($event->sender->pollUrl)) {
+            return $event->sender->pollUrl;
+        }
         return @$model->id
             ? Yii::$app->urlManager->createAbsoluteUrl([
                 preg_replace(
@@ -261,6 +267,9 @@ class Question extends \yii\db\ActiveRecord
         if (static::$isTriggeredByPoll) {
             return;
         }
+        if (static::find()->where(['relation_id' => static::getRelationId($model), 'status' => static::STATUS_OPEN])->count()) {
+            throw new HttpException(451, Yii::t('modules/poll', "This {$model->formName()} is already involved in another poll."));
+        }
         (new static([
             'title' => "(auto) ". $model->formName() . ' "'. static::getRelationTitle($model).'"',
             'description' => "Triggered by event '{$event->name}'",
@@ -276,8 +285,8 @@ class Question extends \yii\db\ActiveRecord
     {
         /** @var Vote $vote */
         $vote = $event->sender;
-        $userCount = User::find()->count();
         $question = $vote->question;
+        $userCount = User::find()->count();
         $votes = $question->getVotes()->joinWith('answer')->select('answer.value')->column();
         $voteCount = count($votes);
         $voteSum = array_sum($votes);

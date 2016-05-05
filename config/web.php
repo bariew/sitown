@@ -70,34 +70,7 @@
         ],
         'event' => [
             'class' => 'bariew\eventManager\EventManager',
-            'events'    => [
-                'app\modules\poll\models\Vote' => [
-                    'afterInsert' => [
-                        ['app\modules\poll\models\Question', 'voteAfterInsertHandler']
-                    ],
-                ],
-                'app\modules\user\models\User' => [
-                    'beforeInsert' => [
-                        ['app\modules\poll\models\Question', 'modelEventHandler']
-                    ],
-                    'beforeUpdate' => [
-                        ['app\modules\poll\models\Question', 'modelEventHandler']
-                    ],
-                ],
-                'app\modules\page\models\Page' => [
-                    'beforeInsert' => [
-                        ['app\modules\poll\models\Question', 'modelEventHandler']
-                    ],
-                    'beforeUpdate' => [
-                        ['app\modules\poll\models\Question', 'modelEventHandler']
-                    ],
-                ],
-                'app\modules\code\models\PullRequest' => [
-                    'beforeMerge' => [
-                        ['app\modules\poll\models\Question', 'modelEventHandler']
-                    ],
-                ],
-            ]
+            'events'    => require '_events.php',
         ],
         'log' => [
             'traceLevel' => 0,
@@ -152,4 +125,4 @@
         'baseUrl' => 'mysite.com',
         'adminEmail'    => 'your.email@site.com'
     ]
-], require __DIR__ . DIRECTORY_SEPARATOR . 'local.php');
+], require 'local.php');
