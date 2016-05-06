@@ -1,22 +1,25 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: pt
- * Date: 21.04.16
- * Time: 20:31
+ * PullRequest class file.
+ * @copyright (c) 2016, Pavel Bariev
+ * @license http://www.opensource.org/licenses/bsd-license.php
  */
-
 namespace app\modules\code\models;
 
 
 use app\modules\code\components\Github;
 use app\modules\poll\helpers\ModelHelper;
 use app\modules\poll\models\Question;
-use app\modules\poll\widgets\Poll;
 use yii\base\Model;
 use yii\base\ModelEvent;
 use yii\data\ArrayDataProvider;
-
+/**
+ * Description.
+ *
+ * Usage:
+ * @author Pavel Bariev <bariew@yandex.ru>
+ *
+ */
 class PullRequest extends Model
 {
     const EVENT_BEFORE_MERGE = 'beforeMerge';
@@ -27,12 +30,21 @@ class PullRequest extends Model
     const STATE_CLOSED = 'closed';
 
 
+    /**
+     * @var string variables from github
+     */
     public $url, $title, $number, $login, $sha;
     public $state = self::STATE_OPEN;
     public $isNewRecord = true;
 
+    /**
+     * @var null|Question[] models polls storage
+     */
     private static $_polls;
 
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
@@ -41,6 +53,11 @@ class PullRequest extends Model
         ];
     }
 
+    /**
+     * Searches pull requests in Github
+     * @param array $params
+     * @return ArrayDataProvider
+     */
     public function search($params = [])
     {
         $rows = $this->getGithub()->pullRequestList(array_merge([
@@ -51,24 +68,43 @@ class PullRequest extends Model
         ]);
     }
 
+    /**
+     * Merges pull request
+     * @param null|string $message
+     * @return array
+     */
     public function merge($message = null)
     {
         $this->trigger(static::EVENT_BEFORE_MERGE, new ModelEvent());
         return !$this->errors && $this->getGithub()->pullRequestMerge($this->number, $this->sha, $message);
     }
 
+    /**
+     * Closes pull request
+     * @return array
+     */
     public function close()
     {
         $this->trigger(static::EVENT_BEFORE_CLOSE, new ModelEvent());
         return $this->getGithub()->pullRequestUpdate($this->number, ['state' => 'closed']);
     }
 
+    /**
+     * Reopens pull request
+     * @return array
+     */
     public function reopen()
     {
         $this->trigger(static::EVENT_BEFORE_REOPEN, new ModelEvent());
         return $this->getGithub()->pullRequestUpdate($this->number, ['state' => 'open']);
     }
 
+    /**
+     * Generates self models from an array of data
+     * @param $rows
+     * @return self[]
+     * @see app\modules\code\models\PullRequest::populate()
+     */
     public static function populateAll($rows)
     {
         $result = [];
@@ -78,6 +114,11 @@ class PullRequest extends Model
         return $result;
     }
 
+    /**
+     * Creates model from a data array
+     * @param $row
+     * @return static
+     */
     public static function populate($row)
     {
         return new static([
@@ -90,6 +131,10 @@ class PullRequest extends Model
         ]);
     }
 
+    /**
+     * Available state list
+     * @return array
+     */
     public static function stateList()
     {
         $data = [static::STATE_OPEN, static::STATE_CLOSED];
@@ -105,6 +150,7 @@ class PullRequest extends Model
     }
 
     /**
+     * Gets the last poll related to this pull request
      * @return Question
      */
     public function getPoll()
@@ -112,17 +158,25 @@ class PullRequest extends Model
         if (static::$_polls === null) {
             static::$_polls = Question::find()
                 ->where(['like', 'relation_id', get_class($this)])
-                ->indexBy('relation_id')
+                ->indexBy('relation_id') // this will get only the last code poll
                 ->all();
         }
         return @static::$_polls[ModelHelper::getRelationId($this)];
     }
 
+    /**
+     * "ID" for the request
+     * @return string
+     */
     public function getId()
     {
         return $this->number . '_' . $this->sha;
     }
 
+    /**
+     * Gets request github url for the poll.
+     * @return string
+     */
     public function getPollUrl()
     {
         return static::getGithub()->pullRequestUrl($this->number);

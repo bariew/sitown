@@ -4,6 +4,7 @@
             ['app\modules\poll\models\Question', 'voteAfterInsertHandler']
         ],
     ],
+    // POLL BLOCK
     'app\modules\user\models\User' => [
         'beforeInsert' => [
             ['app\modules\poll\models\Question', 'modelEventHandler']
@@ -35,6 +36,12 @@
         ],
         'beforeReopen' => [
             ['app\modules\poll\models\Question', 'modelEventHandler']
+        ],
+    ],
+    // EMAILING
+    'app\modules\poll\models\Question' => [
+        'afterInsert' => [
+            ['app\modules\base\components\MailHandler', 'sendToAll']
         ],
     ],
 ];

@@ -39,7 +39,6 @@ class ModelHelper
     }
 
 
-
     public static function getRelationTitle($model)
     {
         foreach (['title', 'name', 'username', 'email', 'id'] as $attribute) {

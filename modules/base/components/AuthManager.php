@@ -1,6 +1,6 @@
 <?php
 
-namespace app\rbac;
+namespace app\modules\base\components;
 use Yii;
 use yii\base\Event;
 use yii\rbac\Assignment;
@@ -8,9 +8,20 @@ use yii\web\Controller;
 use yii\web\HttpException;
 
 
-class PhpManager extends \yii\rbac\PhpManager
+class AuthManager extends \yii\rbac\PhpManager
 {
-    public $debug = false;
+    /**
+     * @inheritdoc
+     */
+    public $itemFile = '@app/modules/base/components/rbac/items.php';
+    /**
+     * @inheritdoc
+     */
+    public $assignmentFile = '@app/modules/base/components/rbac/assignments.php';
+    /**
+     * @inheritdoc
+     */
+    public $ruleFile = '@app/modules/base/components/rbac/rules.php';
 
     public function init()
     {
@@ -33,9 +44,6 @@ class PhpManager extends \yii\rbac\PhpManager
      */
     public function beforeActionAccess(Event $event)
     {
-        if ($this->debug) {
-            return;
-        }
         $controller = $event->sender;
         if (!Yii::$app->user->can($controller->module->id.'/'.$controller->id.'/'.$controller->action->id)) {
             throw new HttpException(403, Yii::t('app/rbac', 'Access denied'));

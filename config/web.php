@@ -38,7 +38,7 @@
             'enableStrictParsing'   => true,
             'rules' => [
                 '/' => 'page/default/view',
-                '<controller>/<action>' => '<controller>/<action>',
+                '<controller>/<action>' => 'base/<controller>/<action>',
                 '<module>/<controller>/<action>' => '<module>/<controller>/<action>',
                 '<url:\\S+>' => 'page/default/view',
             ],
@@ -47,14 +47,14 @@
             'cookieValidationKey'   => 'someValidationKey'
         ],
         'authManager'   => [
-            'class' => 'app\rbac\PhpManager',
-            'defaultRoles' => ['app/site/.*', 'user/default/.*', 'page/default/.*']
+            'class' => 'app\modules\base\components\AuthManager',
+            'defaultRoles' => ['base/site/.*', 'user/default/.*', 'page/default/.*']
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'base/site/error',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
@@ -91,7 +91,7 @@
         'view' => [
             'theme' => [
                 'pathMap' => [
-                    '@app/views' => '@app/web/themes/null',
+                    '@app/views' => '@app/modules/base/views',
                     '@app/modules' => '@app/web/themes/null/modules',
                 ],
                 'basePath' => '@app/web/themes/null',
@@ -115,6 +115,7 @@
         ],
     ],
     'modules' => [
+        'base' => ['class' => 'app\modules\base\Module'],
         'page' => ['class' => 'bariew\\pageModule\\Module'],
         'user' => ['class' => 'app\\modules\\user\\Module'],
         'code' => ['class' => 'app\\modules\\code\\Module'],

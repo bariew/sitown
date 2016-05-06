@@ -5,7 +5,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php
  */
 
-namespace app\controllers;
+namespace app\modules\base\controllers;
 
 use app\modules\code\components\Github;
 use app\modules\poll\models\Question;

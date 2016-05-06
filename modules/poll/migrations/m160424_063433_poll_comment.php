@@ -15,8 +15,8 @@ class m160424_063433_poll_comment extends Migration
             'created_at' => $this->integer(),
             'message' => $this->text(),
         ]);
-        MigrationHelper::addForeignKey($table, 'user_id', \app\modules\user\models\User::tableName(), 'id');
-        MigrationHelper::addForeignKey($table, 'question_id', \app\modules\poll\models\Question::tableName(), 'id');
+        MigrationHelper::addForeignKey($table, 'user_id', \app\modules\user\models\User::tableName(), 'id', 'SET NULL', 'CASCADE');
+        MigrationHelper::addForeignKey($table, 'question_id', \app\modules\poll\models\Question::tableName(), 'id', 'CASCADE', 'CASCADE');
     }
 
     public function down()

@@ -17,7 +17,7 @@ class m160422_075642_poll_vote extends Migration
             'created_at' => $this->integer(),
         ]);
         MigrationHelper::addForeignKey($table, 'answer_id', Answer::tableName(), 'id', 'CASCADE', 'CASCADE');
-        MigrationHelper::addForeignKey($table, 'user_id', User::tableName(), 'id');
+        MigrationHelper::addForeignKey($table, 'user_id', User::tableName(), 'id', 'SET NULL', 'CASCADE');
         $this->addPrimaryKey('id', $table, ['answer_id', 'user_id']);
     }
 

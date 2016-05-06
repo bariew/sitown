@@ -260,7 +260,11 @@ class Question extends \yii\db\ActiveRecord
             return;
         }
         static::$pollBlock = false; // remove block for saving itself
-        if ($question = static::findOne(['relation_id' => ModelHelper::getRelationId($model), 'status' => static::STATUS_OPEN])) {
+        if ($question = static::find()
+            ->where(['relation_id' => ModelHelper::getRelationId($model), 'status' => static::STATUS_OPEN])
+            ->andWhere(['<>', 'relation_id', ''])
+            ->one()
+        ) {
             $message =  Yii::t('modules/poll', "This {$model->formName()} is already involved in another poll.");
         } else {
             $question = new static([

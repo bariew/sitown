@@ -20,7 +20,7 @@ class m160422_075623_poll_question extends Migration
             'description' => $this->text(),
             'created_at' => $this->integer(),
         ]);
-        MigrationHelper::addForeignKey(Question::tableName(), 'user_id', User::tableName(), 'id');
+        MigrationHelper::addForeignKey(Question::tableName(), 'user_id', User::tableName(), 'id', 'SET NULL', 'CASCADE');
     }
 
     public function down()

@@ -24,7 +24,10 @@ return [
         'github'           => $mainConfig['components']['github'],
     ],
     'controllerMap' => [
-        'migrate'   => 'bariew\moduleMigration\ModuleMigrateController',
+        'migrate'   => [
+            'class' => 'bariew\moduleMigration\ModuleMigrateController',
+            'migrationPath' => '@app/modules/base/migrations'
+        ]
     ],
     'modules' => $mainConfig['modules'],
     'params' =>  $mainConfig['params'],
