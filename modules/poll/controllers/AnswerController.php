@@ -50,7 +50,7 @@ class AnswerController extends Controller
      */
     public function actionDelete($id)
     {
-        return $this->findModel($id)->delete();
+        //return $this->findModel($id)->delete();
     }
 
     /**

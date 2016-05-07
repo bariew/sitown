@@ -37,10 +37,13 @@
             'showScriptName'        => false,
             'enableStrictParsing'   => true,
             'rules' => [
-                '/' => 'page/default/view',
+                [
+                    'class' => 'bariew\pageModule\components\UrlRule',
+                    'pattern' => '<url:\\S*>',
+                    'route' => 'page/default/view'
+                ],
                 '<controller>/<action>' => 'base/<controller>/<action>',
                 '<module>/<controller>/<action>' => '<module>/<controller>/<action>',
-                '<url:\\S+>' => 'page/default/view',
             ],
         ],
         'request'   => [

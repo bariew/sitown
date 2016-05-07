@@ -37,7 +37,6 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             [['title'], 'required'],
-            [['value'], 'unique', 'filter' => ['question_id' => $this->question_id]],
             [['title', 'value'], 'string', 'max' => 255],
         ];
     }

@@ -195,7 +195,7 @@ class Question extends \yii\db\ActiveRecord
     {
         return Html::a(
             static::statusList()[$this->status],
-            ['/poll/default/view', 'id' => $this->id],
+            ['/poll/question/view', 'id' => $this->id],
             ['class' => 'bg-'.static::statusLabelList()[$this->status]]
         );
     }
@@ -256,7 +256,7 @@ class Question extends \yii\db\ActiveRecord
     {
         /** @var ActiveRecord $model */
         $model = $event->sender;
-        if (!static::$pollBlock) {
+        if (!static::$pollBlock || YII_DEBUG) {
             return;
         }
         static::$pollBlock = false; // remove block for saving itself
@@ -286,7 +286,7 @@ class Question extends \yii\db\ActiveRecord
             $message = Yii::t('modules/poll', 'These changes will be applied after a successful poll.');
         }
         Yii::$app->session->setFlash('warning', $message);
-        Yii::$app->controller->redirect(['/poll/default/view', 'id' => $question->id]);
+        Yii::$app->controller->redirect(['/poll/question/view', 'id' => $question->id]);
         Yii::$app->end();
     }
 

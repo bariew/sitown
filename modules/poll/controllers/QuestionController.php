@@ -35,7 +35,7 @@ class QuestionController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new QuestionSearch();
+        $searchModel = new QuestionSearch(['status' => Question::STATUS_OPEN]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -74,25 +74,6 @@ class QuestionController extends Controller
             ]);
         }
     }
-
-    /**
-     * Updates an existing Question model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-//    public function actionUpdate($id)
-//    {
-//        $model = $this->findModel($id);
-//
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['index']);
-//        } else {
-//            return $this->render('update', [
-//                'model' => $model,
-//            ]);
-//        }
-//    }
 
     /**
      * Deletes an existing Question model.

@@ -15,23 +15,30 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="question-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <p>
-        <?= \bariew\yii2Tools\helpers\HtmlHelper::linkDropdown(Yii::t('modules/poll', 'Create Question'), array_map(
+    <h1>
+        <?= Html::encode($this->title) ?>
+        <span class="pull-right"><?= \bariew\yii2Tools\helpers\HtmlHelper::linkDropdown(Yii::t('modules/poll', 'Create Question'), array_map(
             function(&$v) { return $v = ['/poll/question/create', 'type' => $v];},
             array_flip($searchModel::typeList())
         )) ?>
-    </p>
+        </span>
+    </h1>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'summary' => false,
         'columns' => [
             'title',
-            GridHelper::listFormat($searchModel, 'status'),
             GridHelper::listFormat($searchModel, 'type'),
             'created_at:date',
             'url:url',
-            'link:raw',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function ($data) {return $data->link;},
+                'filter' => $searchModel::statusList(),
+            ],
         ],
     ]); ?>
 </div>

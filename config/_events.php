@@ -9,11 +9,12 @@
         'beforeInsert' => [
             ['app\modules\poll\models\Question', 'modelEventHandler']
         ],
-        'beforeUpdate' => [
-            ['app\modules\poll\models\Question', 'modelEventHandler']
-        ],
         'beforeDelete' => [
             ['app\modules\poll\models\Question', 'modelEventHandler']
+        ],
+        // EMAILING
+        'afterInsert' => [
+            ['app\modules\base\components\MailHandler', 'sendToAuthor']
         ],
     ],
     'bariew\pageModule\models\Item' => [
