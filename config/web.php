@@ -40,7 +40,8 @@
                 [
                     'class' => 'bariew\pageModule\components\UrlRule',
                     'pattern' => '<url:\\S*>',
-                    'route' => 'page/default/view'
+                    'route' => 'page/default/view',
+                    'enforceSeo' => true,
                 ],
                 '<controller>/<action>' => 'base/<controller>/<action>',
                 '<module>/<controller>/<action>' => '<module>/<controller>/<action>',

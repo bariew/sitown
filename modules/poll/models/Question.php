@@ -256,7 +256,7 @@ class Question extends \yii\db\ActiveRecord
     {
         /** @var ActiveRecord $model */
         $model = $event->sender;
-        if (!static::$pollBlock || YII_DEBUG) {
+        if (!static::$pollBlock) {
             return;
         }
         static::$pollBlock = false; // remove block for saving itself

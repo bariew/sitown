@@ -35,4 +35,4 @@ return \yii\helpers\ArrayHelper::merge([
             'password' => 'admin',
         ],
     ]
-], (file_exists(__DIR__ . '/config-local.php') ? (require __DIR__ . '/config-local.php') : []));
+], require __DIR__ . '/local.php');

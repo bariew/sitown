@@ -30,7 +30,8 @@ case "$COMMAND" in
         /usr/bin/ssh $SERVER sh $PATH/build.sh $PARAM2 2>&1
         ;;
     init)
-        cp config/local.php.example config/local.php
+        #cp config/local.php.example config/local.php
+        #cp tests/codeception/config/local.php.example tests/codeception/config/local.php
         php composer.phar global require "fxp/composer-asset-plugin"
         ;;
     merge)
@@ -55,10 +56,10 @@ case "$COMMAND" in
         php -S localhost:8080 -t web & PID=$!
         rm -rf runtime/cache/*
         ./tests/codeception/bin/yii migrate --interactive=0
-        ./tests/codeception/bin/yii console/generate --interactive=0
-        codecept run $PARAM1 $PARAM2 --config tests/codeception.yml
+        ./tests/codeception/bin/yii fixture/load "*" --interactive=0
+        ./vendor/codeception/codeception/codecept run $PARAM1 $PARAM2 --config tests/codeception.yml
         kill -9 $PID
-        ./yii console/sniff
+        #./yii console/sniff
         rm -rf runtime/cache/*
         ;;
     *)

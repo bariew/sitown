@@ -48,15 +48,6 @@ class ConsoleController extends Controller
         exec("mysqldump -u$user -p$pass $db $tables > " . \Yii::getAlias("@app/runtime/$name"));
     }
 
-    /**
-     * Generates data from fixtures ! removes old table data.
-     * @throws \yii\db\Exception
-     */
-    public function actionGenerate()
-    {
-        \bariew\yii2Tools\tests\FixtureManager::init();
-    }
-
     public function actionTmp()
     {
         $model = Question::find()->one();

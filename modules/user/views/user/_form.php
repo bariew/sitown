@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="user-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'user-form']); ?>
 
     <?php echo $form->field($model, 'email')->textInput(['maxlength' => 255]) ?>
 
