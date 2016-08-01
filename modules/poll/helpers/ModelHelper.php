@@ -76,6 +76,9 @@ class ModelHelper
             $new = array_intersect_key($model->attributes, $model->dirtyAttributes);
         }
         unset($old['password'], $new['password']);
-        return $diff->render(print_r($old, true), print_r($new, true));
+        return $diff->render(
+            preg_replace(['#[\s\n]*\)#', '#Array[\s\n]*\(#'], ['', ''], print_r($old, true)),
+            preg_replace(['#[\s\n]*\)#', '#Array[\s\n]*\(#'], ['', ''], print_r($new, true))
+        );
     }
 }

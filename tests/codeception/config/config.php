@@ -16,7 +16,7 @@ return \yii\helpers\ArrayHelper::merge([
     'components' => [
         'language' => 'en',
         'db' => [
-            'dsn' => 'mysql:host=localhost;dbname=campman_test',
+            'dsn' => 'mysql:host=localhost;dbname=test',
             'username' => '',
             'password' => '',
         ],

@@ -15,21 +15,7 @@ use app\modules\poll\models\Answer;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?=
-    //$form->field($model, 'description')->widget(\kartik\markdown\MarkdownEditor::className(), ['showExport' => false])
-//    $form->field($model, 'description')->widget(\franciscomaya\sceditor\SCEditor::className(), [
-//        'options' => ['rows' => 6],
-//        'clientOptions' => [
-//            'plugins' => 'bbcode',
-//            "toolbar" => "bold,italic,underline|source",
-//            'style' => 'minified/themes/square.min.css',
-//        ]
-//    ])
-//        $form->field($model, 'description')->widget(\trntv\aceeditor\AceEditor::className(), [
-//            'mode'=>'html',
-//            'theme'=>'github'
-//        ])
-    $form->field($model, 'description')->widget(\ijackua\lepture\Markdowneditor::className(), [
+    <?= $form->field($model, 'description')->widget(\ijackua\lepture\Markdowneditor::className(), [
         'markedOptions' => [
             'tables' => false,
             'breaks' => true,

@@ -51,7 +51,7 @@
             'cookieValidationKey'   => 'someValidationKey'
         ],
         'authManager'   => [
-            'class' => 'app\modules\base\components\AuthManager',
+            'class' => 'bariew\yii2Tools\components\PhpAuthManager',
             'defaultRoles' => ['base/site/.*', 'user/default/.*', 'page/default/.*']
         ],
         'cache' => [
